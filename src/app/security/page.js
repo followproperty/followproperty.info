@@ -1,8 +1,11 @@
-"use client";
-
 import React from 'react';
 import PageLayout from '../../components/PageLayout';
 import { Lock } from 'lucide-react';
+
+export const metadata = {
+  title: "Security Registry & Ledgers | FollowProperty",
+  description: "Learn about the security ledgers, data safeguards, and encryption protocols protecting your B2B property inquiries.",
+};
 
 export default function SecurityPage() {
   return (

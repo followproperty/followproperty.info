@@ -1,34 +1,16 @@
-"use client";
-
 import React from 'react';
 import PageLayout from '../../components/PageLayout';
 import { Newspaper, Calendar, ArrowRight, Tag } from 'lucide-react';
+import contentData from '../../data/content.json';
 
-const PRESS_RELEASES = [
-  {
-    id: "bptp-downtown-66-partnership",
-    title: "FollowProperty Announces Strategic Channel Partnership with BPTP for Downtown 66",
-    date: "May 28, 2026",
-    category: "Partnership",
-    desc: "FollowProperty has entered into a strategic channel partnership with BPTP for their landmark commercial project, Downtown 66, in Gurgaon. This partnership combines FollowProperty's transaction analytics with BPTP's premium inventory, offering verified corporate plots and commercial space."
-  },
-  {
-    id: "seed-funding-announcement",
-    title: "FollowProperty Announces Institutional Seed Funding to Expand Prop-Tech Platform",
-    date: "April 08, 2026",
-    category: "Corporate",
-    desc: "The capital injection will scale our data engineering infrastructure, support the onboarding of veteran compliance researchers, and expand our coverage of verified properties across the NCR region."
-  },
-  {
-    id: "registry-safety-initiative",
-    title: "Simplifying Property Verification: FollowProperty's Registry Safety Initiative",
-    date: "March 12, 2026",
-    category: "Advisory Service",
-    desc: "We have officially launched our independent, plain-English verification desk. Individual buyers can now request deed compliance checks and title audits directly from local property experts."
-  }
-];
+export const metadata = {
+  title: "Press Room & Latest Updates | FollowProperty",
+  description: "Read official press releases, corporate announcements, and updates from the FollowProperty team.",
+};
 
 function PressReleasesContent() {
+  const pressReleasesList = contentData.pressReleases || [];
+
   return (
     <section className="relative py-20 md:py-28 overflow-hidden bg-white border-b border-brand-borderMid/10 flex flex-col items-center justify-center min-h-[600px]">
       {/* Dot mesh background */}
@@ -52,12 +34,12 @@ function PressReleasesContent() {
 
         {/* Subtitle */}
         <p className="text-sm sm:text-base lg:text-lg text-brand-slate font-normal leading-relaxed max-w-2xl text-center mx-auto mb-16 font-sans">
-          Stay informed on our tech launches, funding announcements, and research insights as we work to bring complete transparency to Indian real estate.
+          Stay informed on our tech launches, partnerships, and research insights as we work to bring complete transparency to Indian real estate.
         </p>
 
         {/* Press Releases Stack */}
         <div className="w-full flex flex-col gap-8 max-w-3xl">
-          {PRESS_RELEASES.map((pr) => (
+          {pressReleasesList.map((pr) => (
             <article 
               key={pr.id} 
               className="bg-white border border-brand-border/40 hover:border-brand-primary/25 rounded-3xl p-6 sm:p-8 transition-premium hover:-translate-y-0.5 hover:shadow-brand group flex flex-col gap-4 text-left"

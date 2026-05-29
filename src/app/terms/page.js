@@ -1,8 +1,11 @@
-"use client";
-
 import React from 'react';
 import PageLayout from '../../components/PageLayout';
 import { BookOpen } from 'lucide-react';
+
+export const metadata = {
+  title: "Terms of Service | FollowProperty",
+  description: "Review the terms and conditions of using FollowProperty's real-estate advisory services and intelligence platform.",
+};
 
 export default function TermsPage() {
   return (

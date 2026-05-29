@@ -1,26 +1,16 @@
-"use client";
-
 import React from 'react';
 import PageLayout from '../../components/PageLayout';
-import Hero from '../../components/Hero';
-import Business from '../../components/Business';
-import { useLeadForm } from '../../lib/LeadFormContext';
-import contentData from '../../data/content.json';
+import HomeClient from './HomeClient';
 
-function HomeContent() {
-  const { openLeadForm } = useLeadForm();
-  return (
-    <>
-      <Hero data={contentData.hero} onOpenLeadForm={openLeadForm} />
-      <Business />
-    </>
-  );
-}
+export const metadata = {
+  title: "FollowProperty Home | Advisory & Intelligence",
+  description: "Consult with our real-estate advisory desk and explore business owner alliance opportunities.",
+};
 
 export default function HomePage() {
   return (
     <PageLayout>
-      <HomeContent />
+      <HomeClient />
     </PageLayout>
   );
 }

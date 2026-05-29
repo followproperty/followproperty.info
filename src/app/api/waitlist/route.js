@@ -4,7 +4,7 @@ import clientPromise from '../../../lib/mongodb';
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { firstName, lastName, email, city, phone, alreadyOwn } = body;
+    const { firstName, lastName, email, city, phone, alreadyOwn, leadSource, projectName } = body;
 
     // Server-side validation
     if (!firstName || !firstName.trim()) {
@@ -36,11 +36,16 @@ export async function POST(request) {
 
     // De-duplicate email submissions
     const normalizedEmail = email.trim().toLowerCase();
-    const existing = await collection.findOne({ email: normalizedEmail });
+    const existing = await collection.findOne({ 
+      email: normalizedEmail,
+      projectName: projectName ? projectName.trim() : null
+    });
     if (existing) {
       return NextResponse.json({
         success: false,
-        message: 'This email is already registered on our early access waitlist.'
+        message: projectName
+          ? `You have already registered your interest for ${projectName} with this email.`
+          : 'This email is already registered on our early access waitlist.'
       }, { status: 400 });
     }
 
@@ -52,6 +57,8 @@ export async function POST(request) {
       city: city.trim(),
       phone: phone.trim(),
       alreadyOwn: typeof alreadyOwn === 'boolean' ? alreadyOwn : false,
+      leadSource: leadSource ? leadSource.trim() : 'general',
+      projectName: projectName ? projectName.trim() : null,
       registeredAt: new Date()
     };
 

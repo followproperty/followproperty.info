@@ -1,8 +1,11 @@
-"use client";
-
 import React from 'react';
 import PageLayout from '../../components/PageLayout';
 import { Shield } from 'lucide-react';
+
+export const metadata = {
+  title: "Privacy Policy | FollowProperty",
+  description: "Read our privacy disclosure and learn how we safeguard client and developer information under security ledgers.",
+};
 
 export default function PrivacyPage() {
   return (

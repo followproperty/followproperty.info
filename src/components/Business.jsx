@@ -53,6 +53,7 @@ export default function Business({ inlineForm = false }) {
     businessType: "",
     location: "",
     designation: "",
+    requirements: "",
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -69,6 +70,7 @@ export default function Business({ inlineForm = false }) {
       businessType: "",
       location: "",
       designation: "",
+      requirements: "",
     });
   };
 
@@ -98,6 +100,8 @@ export default function Business({ inlineForm = false }) {
       errors.location = "Business location is required";
     if (!form.designation.trim())
       errors.designation = "Designation is required";
+    if (!form.requirements.trim())
+      errors.requirements = "Real estate requirements are required";
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -418,6 +422,33 @@ export default function Business({ inlineForm = false }) {
                       {formErrors.location && (
                         <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans text-left">
                           {formErrors.location}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Real Estate Requirements */}
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans text-left">
+                        What exactly are you looking for in terms of real estate to expand your business? <span className="text-brand-primary">*</span>
+                      </label>
+                      <div className="relative">
+                        <textarea
+                          rows={3}
+                          placeholder="e.g. 5,000 sq ft commercial office space near Sohna Road with corporate layout."
+                          value={form.requirements}
+                          onChange={(e) =>
+                            handleFieldChange("requirements", e.target.value)
+                          }
+                          className={`w-full pl-4 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans resize-none ${
+                            formErrors.requirements
+                              ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
+                              : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
+                          }`}
+                        ></textarea>
+                      </div>
+                      {formErrors.requirements && (
+                        <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans text-left">
+                          {formErrors.requirements}
                         </span>
                       )}
                     </div>

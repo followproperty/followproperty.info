@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { X, Check, Lock, ArrowRight } from 'lucide-react';
 import contentData from '../data/content.js';
 
-export default function LeadForm({ isOpen, onClose, ctaText }) {
+export default function LeadForm({ isOpen, onClose, ctaText, options }) {
   const strings = contentData.leadForm || {};
   const campaign = contentData.marketCampaign;
 
@@ -75,7 +75,11 @@ export default function LeadForm({ isOpen, onClose, ctaText }) {
       const response = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          leadSource: options?.leadSource || 'general',
+          projectName: options?.projectName || null
+        })
       });
       const data = await response.json();
       
@@ -139,13 +143,15 @@ export default function LeadForm({ isOpen, onClose, ctaText }) {
                   />
                 </div>
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-brand-primaryBg border border-brand-primaryBorder/30 text-[9px] font-bold tracking-widest text-brand-primary uppercase mb-3">
-                  {strings.waitlistBadge || '★ WAITLIST OPEN'}
+                  {options?.projectName ? '★ PROJECT INQUIRY' : (strings.waitlistBadge || '★ ADVISORY DESK')}
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-extrabold text-brand-navy tracking-tight font-sans mb-2">
-                  {strings.title || 'Request Early Access'}
+                  {options?.projectName ? `Inquire about ${options.projectName}` : (strings.title || 'Consult with Our Advisory Desk')}
                 </h3>
                 <p className="text-xs sm:text-sm text-brand-slate font-light leading-relaxed">
-                  {strings.subtitle || 'Join our exclusive priority waitlist to secure first-access allocations and yield intelligence dashboards.'}
+                  {options?.projectName 
+                    ? `Register your interest for ${options.projectName}. A partner from our Gurgaon desk will contact you with pricing, layouts, and inventory updates.`
+                    : (strings.subtitle || 'Register your property requirements or developer alliance requests below. A partner from our Gurgaon desk will contact you.')}
                 </p>
               </div>
 
@@ -332,10 +338,12 @@ export default function LeadForm({ isOpen, onClose, ctaText }) {
                 <Check className="w-8 h-8 stroke-[3]" />
               </div>
               <h3 className="text-2xl font-extrabold text-brand-navy mb-3 font-sans tracking-tight">
-                {strings.successTitle || 'Successfully Registered!'}
+                {options?.projectName ? 'Registration Received!' : (strings.successTitle || 'Successfully Registered!')}
               </h3>
               <p className="text-sm text-brand-slate font-light leading-relaxed mb-8 max-w-sm mx-auto font-sans">
-                Thank you for applying. You will receive an email as soon as we launch.
+                {options?.projectName 
+                  ? `Thank you for registering interest in ${options.projectName}. An advisory partner will contact you shortly.`
+                  : (strings.successSubtitle || 'Thank you for registering. An advisory partner will contact you shortly to review your requirements.')}
               </p>
               <button
                 onClick={() => {

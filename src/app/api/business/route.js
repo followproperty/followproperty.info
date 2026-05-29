@@ -4,7 +4,7 @@ import clientPromise from '../../../lib/mongodb';
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, phone, city, businessType, location, designation } = body;
+    const { name, phone, city, businessType, location, designation, requirements } = body;
 
     // Server-side validation
     if (!name || !name.trim()) {
@@ -28,6 +28,9 @@ export async function POST(request) {
     if (!designation || !designation.trim()) {
       return NextResponse.json({ success: false, message: 'Designation is required' }, { status: 400 });
     }
+    if (!requirements || !requirements.trim()) {
+      return NextResponse.json({ success: false, message: 'Real estate requirements are required' }, { status: 400 });
+    }
 
     // Connect to MongoDB Atlas via connection pool client promise
     const client = await clientPromise;
@@ -42,6 +45,7 @@ export async function POST(request) {
       businessType: businessType.trim(),
       location: location.trim(),
       designation: designation.trim(),
+      requirements: requirements.trim(),
       registeredAt: new Date()
     };
 

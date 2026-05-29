@@ -10,9 +10,20 @@ import contentData from '../data/content.json';
 
 export default function PageLayout({ children }) {
   const [isLeadFormOpen, setIsLeadFormOpen] = useState(false);
+  const [leadFormOptions, setLeadFormOptions] = useState(null);
 
-  const handleOpenLeadForm = () => setIsLeadFormOpen(true);
-  const handleCloseLeadForm = () => setIsLeadFormOpen(false);
+  const handleOpenLeadForm = (options) => {
+    if (options && typeof options === 'object') {
+      setLeadFormOptions(options);
+    } else {
+      setLeadFormOptions(null);
+    }
+    setIsLeadFormOpen(true);
+  };
+  const handleCloseLeadForm = () => {
+    setIsLeadFormOpen(false);
+    setLeadFormOptions(null);
+  };
 
   return (
     <LeadFormContext.Provider value={{ openLeadForm: handleOpenLeadForm }}>
@@ -40,6 +51,7 @@ export default function PageLayout({ children }) {
           isOpen={isLeadFormOpen} 
           onClose={handleCloseLeadForm} 
           ctaText={contentData.hero.cta}
+          options={leadFormOptions}
         />
 
         {/* Floating Missed Call / Callback Button */}

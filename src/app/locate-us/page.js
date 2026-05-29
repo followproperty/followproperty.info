@@ -1,9 +1,12 @@
-"use client";
-
 import React from 'react';
 import PageLayout from '../../components/PageLayout';
 import { MapPin, Phone, Mail, Navigation } from 'lucide-react';
 import contentData from '../../data/content.json';
+
+export const metadata = {
+  title: "Find Our Corporate Office | FollowProperty",
+  description: "Contact or visit our corporate office at Sector 49, Gurgaon. Get directions and contact details.",
+};
 
 function LocateUsContent() {
   const contact = contentData.contactDetails || {};
@@ -55,7 +58,7 @@ function LocateUsContent() {
                 <a href={`tel:${contact.phone}`} className="flex items-start gap-3 hover:text-brand-primary transition-colors">
                   <Phone className="w-5 h-5 text-brand-slateLight shrink-0 mt-0.5" />
                   <div className="flex flex-col">
-                    <span className="text-[9px] font-bold text-brand-slateLight tracking-wider uppercase">Phone</span>
+                     <span className="text-[9px] font-bold text-brand-slateLight tracking-wider uppercase">Phone</span>
                     <span className="mt-0.5 font-bold">{contact.phone}</span>
                   </div>
                 </a>

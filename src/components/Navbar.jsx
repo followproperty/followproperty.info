@@ -38,7 +38,7 @@ export default function Navbar({ data, ctaText, onOpenLeadForm }) {
     return `/${normalized.replace(/[^a-z0-9]+/g, '-')}`;
   };
 
-  const primaryLinks = ['About Us', 'Services', 'Products', 'Team', 'Business Owner'];
+  const primaryLinks = ['About Us', 'Services', 'Products', 'Current Projects', 'Team', 'Business Owner'];
   const dropdownLinks = ['FAQ', 'Press Release', 'Careers', 'Locate Us', 'Contact Us'];
 
   return (

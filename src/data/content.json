@@ -2,7 +2,7 @@
   "contactDetails": {
     "email": "ifollowproperty@gmail.com",
     "phone": "+918796508866",
-    "address": "IT Spaze Park, Sector 49, Gurgaon, India"
+    "address": "11th Floor, Tower A, IT Spaze Park, Sector 49, Gurgaon, India"
   },
   "socialLinks": {
     "instagram": "https://www.instagram.com/ifollowproperty",
@@ -17,6 +17,7 @@
       "About Us",
       "Services",
       "Products",
+      "Current Projects",
       "Team",
       "FAQ",
       "Press Release",
@@ -305,5 +306,101 @@
         ]
       }
     ]
-  }
+  },
+  "projectsSection": {
+    "badge": "★ CURRENT PROJECTS",
+    "title": "Institutional Project Offerings",
+    "subtitle": "Discover verified residential, plotting, and commercial projects across key Indian micro-markets, backed by our rigorous compliance audit and advisory desk.",
+    "items": [
+      {
+        "id": "bptp-downtown",
+        "name": "BPTP Downtown",
+        "description": "Premium commercial and retail spaces by BPTP Group in Sector 66, Gurgaon, offering modern corporate suites, high-street retail zones, and institutional-grade amenities in a high-growth corridor.",
+        "cta": "I'm Interested",
+        "status": null,
+        "price": null
+      },
+      {
+        "id": "nagpur-plotting",
+        "name": "Nagpur Plotting Project",
+        "description": "Strategic plotted developments in Nagpur's expanding economic zones, offering secure land investments and high long-term appreciation potential.",
+        "price": "₹2 Cr",
+        "status": "Coming Soon",
+        "cta": "I'm Interested"
+      },
+      {
+        "id": "vrindavan-plotting",
+        "name": "Vrindavan Plotting Project",
+        "description": "Exclusive plotted communities in Vrindavan's spiritual and tourist corridor, combining serene surroundings with institutional-grade development standards.",
+        "price": "₹1 Cr",
+        "status": "Coming Soon",
+        "cta": "I'm Interested"
+      }
+    ]
+  },
+  "pressReleases": [
+    {
+      "id": "india-realty-tieup",
+      "title": "Tie-Up with India Realty for NCR Branded Property Sales",
+      "date": "May 29, 2026",
+      "category": "Partnership",
+      "desc": "Placeholder content. Final content will be provided later."
+    },
+    {
+      "id": "advisory-intelligence-expansion",
+      "title": "FollowProperty Announces Advisory & Property Intelligence Expansion",
+      "date": "May 15, 2026",
+      "category": "Advisory Service",
+      "desc": "Placeholder content. Final content will be provided later."
+    },
+    {
+      "id": "strategic-channel-partnership",
+      "title": "Strategic Channel Partnership Announcement",
+      "date": "April 28, 2026",
+      "category": "Partnership",
+      "desc": "Placeholder content. Final content will be provided later."
+    }
+  ],
+  "careers": [
+    {
+      "id": "data-entry-intern",
+      "title": "Data Entry Intern",
+      "location": "Sector 49, Gurgaon",
+      "type": "Part-time / Internship",
+      "desc": "Assist the prop-tech intelligence team with verification of RERA records, municipal database entry, and accuracy audits.",
+      "skills": ["Data Entry", "Microsoft Excel", "Accuracy"]
+    },
+    {
+      "id": "data-entry-executive",
+      "title": "Data Entry Executive (Full-Time)",
+      "location": "Sector 49, Gurgaon",
+      "type": "Full-time (On-site)",
+      "desc": "Verify, enter, and audit real estate municipal records, developer construction updates, and circle rate valuation files.",
+      "skills": ["Data Auditing", "RERA Records", "Typing Speed", "Excel"]
+    },
+    {
+      "id": "data-analyst",
+      "title": "Senior Real Estate Data Analyst",
+      "location": "Sector 49, Gurgaon",
+      "type": "Full-time (Hybrid)",
+      "desc": "Lead our transaction pricing indices, builder milestones, and localized micro-market value benchmarks to bring clarity to Gurgaon property buyers.",
+      "skills": ["RERA Verification", "Circle Rate Modeling", "Market Comparables", "Excel/SQL"]
+    },
+    {
+      "id": "frontend-engineer",
+      "title": "Frontend Engineer - React/Next.js",
+      "location": "Sector 49, Gurgaon",
+      "type": "Full-time (On-site)",
+      "desc": "Own user interfaces, construction tracking dashboards, and interactive watchlist flows on our core FollowProperty Intelligence Platform.",
+      "skills": ["React 19", "Next.js App Router", "Tailwind CSS v4", "High-End UX/Animations"]
+    },
+    {
+      "id": "legal-researcher",
+      "title": "Legal Compliance & RERA Researcher",
+      "location": "Sector 49, Gurgaon",
+      "type": "Full-time (Hybrid)",
+      "desc": "Verify municipal filings, developer delivery timelines, and land registry safety alerts to protect our institutional and individual buyer portfolios.",
+      "skills": ["Property Law", "Title Deed Safety Audits", "Gurgaon Municipal Records", "RERA Regulations"]
+    }
+  ]
 }
