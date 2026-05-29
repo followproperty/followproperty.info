@@ -27,25 +27,57 @@ export default function PrivacyPage() {
               Last Updated: May 28, 2026
             </p>
             <p>
-              At FollowProperty, we prioritize the confidentiality and security of our clients, family offices, and developers. This Privacy Policy details how we handle property inquiries, due diligence records, and registration inputs.
+              At FollowProperty, we prioritize the confidentiality, safety, and security of our clients, institutional buyers, family offices, and developers. This Privacy Policy details how we collect, process, utilize, and safeguard property inquiries, due diligence records, and registration inputs.
             </p>
+
             <h3 className="text-lg font-bold text-brand-navy mt-8 mb-3">
-              1. Data Collection
+              1. Information We Collect
             </h3>
             <p>
-              We collect user inputs provided voluntarily through our Advisory Desk registration, B2B partnership form, and search parameters. This includes contact details, requirements, and enterprise details. We do not sell or lease this information to third-party brokerages.
+              We collect user inputs provided voluntarily through our Advisory Desk registration, B2B partnership form, contact pages, and personalized property watchlist search parameters. This includes:
             </p>
+            <ul className="list-disc pl-5 space-y-2">
+              <li><strong>Contact details:</strong> First name, last name, email address, phone number, and city.</li>
+              <li><strong>Search parameters:</strong> Preferred locations, budgets, BHK specifications, possession timelines, and preferred builders.</li>
+              <li><strong>Business details:</strong> Organization name, title/designation, and specific commercial requirements for business owner inquiries.</li>
+              <li><strong>Candidate data:</strong> For job applications, we collect student status, professional credentials, and public resume links.</li>
+            </ul>
+
             <h3 className="text-lg font-bold text-brand-navy mt-8 mb-3">
-              2. Information Security
+              2. How We Use Your Information
             </h3>
             <p>
-              All advisory data and RERA audit records are stored behind bank-grade encryption ledgers. Access is restricted to authorized real-estate analysts at our Gurgaon corporate desk.
+              Your information is strictly used to deliver tailormade, highly personalized real estate advisory services. Specifically, we use your data to:
             </p>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>Process and respond to your general advisory or project inquiries.</li>
+              <li>Provide real-time property matches and RERA compliance alert updates based on your search parameters.</li>
+              <li>Analyze market pricing metrics and circle rate fluctuations in target micro-markets.</li>
+              <li>Evaluate career applications and contact candidates for technical, research, or executive roles.</li>
+            </ul>
+            <p>
+              We maintain a zero-spam policy. FollowProperty does not sell, lease, trade, or distribute your private contact details or requirements to third-party marketing agencies or external broker databases.
+            </p>
+
             <h3 className="text-lg font-bold text-brand-navy mt-8 mb-3">
-              3. Communication Preferences
+              3. Data Security and Encryption
             </h3>
             <p>
-              We maintain a zero-spam policy. Communications are strictly limited to requested consultations, custom property valuations, and title safety alerts.
+              All advisory files, circle-rate feeds, and database records are safeguarded behind bank-grade encryption protocols (TLS 1.3 and AES-256). Database access is restricted strictly to authorized property analysts at our Gurgaon operations desk on a strict need-to-know basis.
+            </p>
+
+            <h3 className="text-lg font-bold text-brand-navy mt-8 mb-3">
+              4. Cookies and Analytical Tracking
+            </h3>
+            <p>
+              We employ lightweight analytical cookies and tracking scripts (such as Google Analytics) to measure site performance, page response times, and user engagement metrics. This data is strictly aggregated and anonymized, carrying no personally identifiable details.
+            </p>
+
+            <h3 className="text-lg font-bold text-brand-navy mt-8 mb-3">
+              5. Your Rights and Opt-Out Options
+            </h3>
+            <p>
+              You maintain complete ownership of your personal data. You may contact our data privacy officer at any time to request access to, correction of, or complete deletion of your records from our databases by writing to <a href="mailto:privacy@followproperty.com" className="text-brand-primary font-bold hover:underline">privacy@followproperty.com</a>.
             </p>
           </div>
         </div>

@@ -27,25 +27,49 @@ export default function SecurityPage() {
               Last Updated: May 28, 2026
             </p>
             <p>
-              Security and confidentiality are core foundations of our real-estate advisory operations. FollowProperty implements institutional protections to safeguard land deeds, circle rate indices, and client consultations.
+              At FollowProperty, security, confidentiality, and data integrity are the structural pillars of our real-estate advisory and prop-tech operations. We deploy enterprise-grade safeguards to protect property searches, due diligence audit logs, and B2B registrations.
             </p>
+
             <h3 className="text-lg font-bold text-brand-navy mt-8 mb-3">
-              1. Registry Safeguards
+              1. Platform Infrastructure & Database Safeguards
             </h3>
             <p>
-              We monitor land registry updates and title safety parameters. Data feeds utilized by our prop-tech analytics maps are aggregated from verified, public RERA archives and municipal deed records.
+              Our web servers, API configurations, and database integrations are structured with strict isolation rules:
             </p>
+            <ul className="list-disc pl-5 space-y-2">
+              <li><strong>Encryption-in-Transit:</strong> All data submitted through our frontend forms is encrypted using Transport Layer Security (TLS 1.3) protocols.</li>
+              <li><strong>Encryption-at-Rest:</strong> Our databases (MongoDB Atlas) utilize automated, AES-256 volume encryption to safeguard records at the storage tier.</li>
+              <li><strong>Zero-Trust Configuration:</strong> Server access is regulated via private virtual network links, key pair authentications, and IP white-listings.</li>
+            </ul>
+
             <h3 className="text-lg font-bold text-brand-navy mt-8 mb-3">
-              2. Transaction Privacy
+              2. Independent RERA and Deed Verification Audit Logs
             </h3>
             <p>
-              B2B partner details, developer data queries, and individual advisory consultations are secured under strict non-disclosure registries. We employ bank-grade encryption protocols for all form submissions and databases.
+              We compile and index municipal registry files, land ownership histories, and construction milestone compliance logs. Audit pipelines run isolated from user identification databases to ensure complete anonymity when consulting or compiling micro-market comparative circle-rates.
             </p>
+
             <h3 className="text-lg font-bold text-brand-navy mt-8 mb-3">
-              3. Security Compliance
+              3. Confidentiality for Family Offices and B2B Alliances
             </h3>
             <p>
-              Our software infrastructure is continuously updated to prevent cross-site scripting, SQL injections, and unauthorized database access. Security checkups are run weekly by our Gurgaon-based technical operations team.
+              B2B developer requirements, commercial leasing listings, and custom land acquisitions represent highly sensitive commercial information. We secure these details under institutional non-disclosure guidelines. No details are written to public logs, cached on unencrypted systems, or shared across builder networks.
+            </p>
+
+            <h3 className="text-lg font-bold text-brand-navy mt-8 mb-3">
+              4. Continuous Threat Assessments
+            </h3>
+            <p>
+              Our engineering team regularly audits codebases, packages, and dependency versions to defend against standard threat vectors:
+            </p>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>Cross-Site Scripting (XSS) prevention.</li>
+              <li>Cross-Site Request Forgery (CSRF) defenses.</li>
+              <li>SQL injection and server request tempering auditing.</li>
+              <li>Automated server firewalls and rate-limiting blocks.</li>
+            </ul>
+            <p>
+              To report a technical vulnerability or query data safeguard practices, contact our security operations desk at <a href="mailto:security@followproperty.com" className="text-brand-primary font-bold hover:underline">security@followproperty.com</a>.
             </p>
           </div>
         </div>

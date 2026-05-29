@@ -5,7 +5,15 @@ import { Mail, Phone, MapPin, Send, CheckCircle2, User, PhoneCall, MessageSquare
 import contentData from '../../data/content.json';
 
 export default function ContactClient() {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    city: '',
+    phone: '',
+    alreadyOwn: false,
+    message: ''
+  });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -21,12 +29,14 @@ export default function ContactClient() {
 
   const validate = () => {
     const errs = {};
-    if (!form.name.trim()) errs.name = "Full name is required";
+    if (!form.firstName.trim()) errs.firstName = "First name is required";
+    if (!form.lastName.trim()) errs.lastName = "Last name is required";
     if (!form.email.trim()) {
       errs.email = "Email address is required";
     } else if (!/\S+@\S+\.\S+/.test(form.email)) {
       errs.email = "Please enter a valid email address";
     }
+    if (!form.city.trim()) errs.city = "City is required";
     if (!form.phone.trim()) {
       errs.phone = "Phone number is required";
     } else if (!/^\d{10}$/.test(form.phone.trim())) {
@@ -43,12 +53,44 @@ export default function ContactClient() {
     if (!validate()) return;
 
     setSubmitting(true);
-    // Simulate submission
-    setTimeout(() => {
+    setErrors({});
+
+    try {
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: form.firstName,
+          lastName: form.lastName,
+          email: form.email,
+          city: form.city,
+          phone: form.phone,
+          alreadyOwn: form.alreadyOwn,
+          message: form.message,
+          leadSource: 'contact'
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setSubmitted(true);
+        setForm({
+          firstName: '',
+          lastName: '',
+          email: '',
+          city: '',
+          phone: '',
+          alreadyOwn: false,
+          message: ''
+        });
+      } else {
+        setErrors({ submit: data.message || 'Failed to send message. Please try again.' });
+      }
+    } catch (err) {
+      setErrors({ submit: 'Network error. Please check your connection and try again.' });
+    } finally {
       setSubmitting(false);
-      setSubmitted(true);
-      setForm({ name: '', email: '', phone: '', message: '' });
-    }, 1200);
+    }
   };
 
   return (
@@ -150,70 +192,132 @@ export default function ContactClient() {
                   Please fill out the details below and we will get back to you shortly.
                 </p>
 
-                {/* Name */}
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
-                    Full Name <span className="text-brand-primary">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="e.g. John Doe"
-                      value={form.name}
-                      onChange={(e) => handleFieldChange('name', e.target.value)}
-                      className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
-                        errors.name
-                          ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
-                          : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
-                      }`}
-                    />
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-brand-slateLight">
-                      <User className="w-4 h-4" />
-                    </div>
-                  </div>
-                  {errors.name && (
-                    <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans">
-                      {errors.name}
-                    </span>
-                  )}
-                </div>
-
-                {/* Email & Phone */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {/* First Name & Last Name */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
-                      Email Address <span className="text-brand-primary">*</span>
+                    <label htmlFor="firstName" className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
+                      First Name <span className="text-brand-primary">*</span>
                     </label>
                     <div className="relative">
                       <input
-                        type="email"
-                        placeholder="john.doe@example.com"
-                        value={form.email}
-                        onChange={(e) => handleFieldChange('email', e.target.value)}
+                        type="text"
+                        id="firstName"
+                        placeholder="e.g. John"
+                        value={form.firstName}
+                        onChange={(e) => handleFieldChange('firstName', e.target.value)}
                         className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
-                          errors.email
+                          errors.firstName
                             ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
                             : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
                         }`}
                       />
                       <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-brand-slateLight">
-                        <Mail className="w-4 h-4" />
+                        <User className="w-4 h-4" />
                       </div>
                     </div>
-                    {errors.email && (
+                    {errors.firstName && (
                       <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans">
-                        {errors.email}
+                        {errors.firstName}
                       </span>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
+                    <label htmlFor="lastName" className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
+                      Last Name <span className="text-brand-primary">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        id="lastName"
+                        placeholder="e.g. Doe"
+                        value={form.lastName}
+                        onChange={(e) => handleFieldChange('lastName', e.target.value)}
+                        className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
+                          errors.lastName
+                            ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
+                            : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
+                        }`}
+                      />
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-brand-slateLight">
+                        <User className="w-4 h-4" />
+                      </div>
+                    </div>
+                    {errors.lastName && (
+                      <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans">
+                        {errors.lastName}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Email Address */}
+                <div>
+                  <label htmlFor="email" className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
+                    Email Address <span className="text-brand-primary">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      id="email"
+                      placeholder="john.doe@example.com"
+                      value={form.email}
+                      onChange={(e) => handleFieldChange('email', e.target.value)}
+                      className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
+                        errors.email
+                          ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
+                          : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
+                      }`}
+                    />
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-brand-slateLight">
+                      <Mail className="w-4 h-4" />
+                    </div>
+                  </div>
+                  {errors.email && (
+                    <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans">
+                      {errors.email}
+                    </span>
+                  )}
+                </div>
+
+                {/* City & Phone Number */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="city" className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
+                      City <span className="text-brand-primary">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        id="city"
+                        placeholder="e.g. Gurgaon"
+                        value={form.city}
+                        onChange={(e) => handleFieldChange('city', e.target.value)}
+                        className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
+                          errors.city
+                            ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
+                            : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
+                        }`}
+                      />
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-brand-slateLight">
+                        <MapPin className="w-4 h-4" />
+                      </div>
+                    </div>
+                    {errors.city && (
+                      <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans">
+                        {errors.city}
+                      </span>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="phone" className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
                       Phone Number <span className="text-brand-primary">*</span>
                     </label>
                     <div className="relative">
                       <input
                         type="text"
+                        id="phone"
                         placeholder="9856XXXXXX"
                         value={form.phone}
                         onChange={(e) => handleFieldChange('phone', e.target.value)}
@@ -235,13 +339,39 @@ export default function ContactClient() {
                   </div>
                 </div>
 
+                {/* Already Own Property Checkbox */}
+                <div className="flex items-center py-1">
+                  <label className="relative flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      id="alreadyOwn"
+                      checked={form.alreadyOwn}
+                      onChange={(e) => handleFieldChange('alreadyOwn', e.target.checked)}
+                      className="peer sr-only"
+                    />
+                    <div className={`w-5.5 h-5.5 rounded-lg border-2 flex items-center justify-center text-white transition-premium shadow-sm group-hover:border-brand-primaryLight ${
+                      form.alreadyOwn 
+                        ? 'bg-brand-primary border-brand-primary' 
+                        : 'border-brand-border bg-white'
+                    }`}>
+                      <CheckCircle2 className={`w-3.5 h-3.5 transition-opacity duration-200 ${
+                        form.alreadyOwn ? 'opacity-100' : 'opacity-0'
+                      }`} />
+                    </div>
+                    <span className="text-xs sm:text-sm font-semibold text-brand-navy select-none transition-premium group-hover:text-brand-primary">
+                      Own Property in Gurgaon
+                    </span>
+                  </label>
+                </div>
+
                 {/* Message */}
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
+                  <label htmlFor="message" className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
                     Your Message <span className="text-brand-primary">*</span>
                   </label>
                   <div className="relative">
                     <textarea
+                      id="message"
                       rows={4}
                       placeholder="Please describe your query in detail..."
                       value={form.message}
@@ -263,11 +393,18 @@ export default function ContactClient() {
                   )}
                 </div>
 
+                {/* Submission Error Banner */}
+                {errors.submit && (
+                  <p className="text-xs text-brand-red text-center font-bold font-sans bg-brand-redBg border border-brand-red/10 py-2.5 px-4 rounded-xl animate-fadeIn">
+                    ⚠️ {errors.submit}
+                  </p>
+                )}
+
                 {/* Submit */}
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-3 rounded-xl text-xs sm:text-sm font-bold tracking-widest uppercase bg-white text-brand-navy border border-brand-navy/80 hover:bg-brand-navy hover:text-white hover:border-brand-navy shadow-sm hover:scale-[1.01] active:scale-[0.99] transition-premium flex items-center justify-center gap-2 cursor-pointer font-sans"
+                  className="w-full py-3 rounded-xl text-xs sm:text-sm font-bold tracking-widest uppercase bg-white text-brand-navy border border-brand-navy/80 hover:bg-brand-navy hover:text-white hover:border-brand-navy shadow-sm hover:scale-[1.01] active:scale-[0.99] transition-premium flex items-center justify-center gap-2 cursor-pointer font-sans disabled:opacity-50"
                 >
                   {submitting ? (
                     <>

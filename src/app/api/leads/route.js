@@ -4,7 +4,7 @@ import clientPromise from '../../../lib/mongodb';
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { firstName, lastName, email, city, phone, alreadyOwn, leadSource, projectName } = body;
+    const { firstName, lastName, email, city, phone, alreadyOwn, leadSource, projectName, message } = body;
 
     // Server-side validation
     if (!firstName || !firstName.trim()) {
@@ -34,19 +34,22 @@ export async function POST(request) {
     const db = client.db('followproperty');
     const collection = db.collection('leads');
 
-    // De-duplicate email submissions
+    // De-duplicate email submissions (except for contact form submissions)
     const normalizedEmail = email.trim().toLowerCase();
-    const existing = await collection.findOne({ 
-      email: normalizedEmail,
-      projectName: projectName ? projectName.trim() : null
-    });
-    if (existing) {
-      return NextResponse.json({
-        success: false,
-        message: projectName
-          ? `You have already registered your interest for ${projectName} with this email.`
-          : 'This email is already registered on our lead registry.'
-      }, { status: 400 });
+    if (leadSource !== 'contact') {
+      const existing = await collection.findOne({ 
+        email: normalizedEmail,
+        projectName: projectName ? projectName.trim() : null,
+        leadSource: { $ne: 'contact' }
+      });
+      if (existing) {
+        return NextResponse.json({
+          success: false,
+          message: projectName
+            ? `You have already registered your interest for ${projectName} with this email.`
+            : 'This email is already registered on our lead registry.'
+        }, { status: 400 });
+      }
     }
 
     // Insert payload
@@ -59,6 +62,7 @@ export async function POST(request) {
       alreadyOwn: typeof alreadyOwn === 'boolean' ? alreadyOwn : false,
       leadSource: leadSource ? leadSource.trim() : 'general',
       projectName: projectName ? projectName.trim() : null,
+      message: message ? message.trim() : null,
       registeredAt: new Date()
     };
 
