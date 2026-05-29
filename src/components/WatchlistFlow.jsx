@@ -728,7 +728,7 @@ export default function WatchlistFlow({ data, onClose, plainLayout = false }) {
                         <div className="relative">
                           <input
                             type="text"
-                            placeholder="e.g. Rahul"
+                            placeholder="e.g. John"
                             value={contactForm.firstName}
                             onChange={(e) =>
                               setContactForm((prev) => ({
@@ -760,7 +760,7 @@ export default function WatchlistFlow({ data, onClose, plainLayout = false }) {
                         <div className="relative">
                           <input
                             type="text"
-                            placeholder="e.g. Sharma"
+                            placeholder="e.g. Doe"
                             value={contactForm.lastName}
                             onChange={(e) =>
                               setContactForm((prev) => ({
@@ -795,7 +795,7 @@ export default function WatchlistFlow({ data, onClose, plainLayout = false }) {
                         <div className="relative">
                           <input
                             type="email"
-                            placeholder="rahul@example.com"
+                            placeholder="john.doe@example.com"
                             value={contactForm.email}
                             onChange={(e) =>
                               setContactForm((prev) => ({
@@ -837,7 +837,7 @@ export default function WatchlistFlow({ data, onClose, plainLayout = false }) {
                         <div className="relative">
                           <input
                             type="text"
-                            placeholder="e.g. 9876543210"
+                            placeholder="9856XXXXXX"
                             value={contactForm.phone}
                             onChange={(e) =>
                               setContactForm((prev) => ({

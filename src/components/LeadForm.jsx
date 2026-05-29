@@ -2,9 +2,11 @@
 
 import React, { useState } from 'react';
 import { X, Check, Lock, ArrowRight } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import contentData from '../data/content.js';
 
 export default function LeadForm({ isOpen, onClose, ctaText, options }) {
+  const pathname = usePathname();
   const strings = contentData.leadForm || {};
   const campaign = contentData.marketCampaign;
 
@@ -19,6 +21,8 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const showCheckbox = pathname !== '/current-projects' && !options?.projectName;
 
   if (!isOpen) return null;
 
@@ -170,7 +174,7 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleChange}
-                      placeholder={strings.firstNamePlaceholder || 'e.g. Rahul'}
+                      placeholder={strings.firstNamePlaceholder || 'e.g. John'}
                       className={`w-full px-4 py-3.5 rounded-xl text-sm text-brand-navy bg-white border border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 outline-none transition-premium placeholder-brand-slateLight/75 ${
                         errors.firstName ? 'border-brand-red focus:border-brand-red focus:ring-brand-red/5' : ''
                       }`}
@@ -190,7 +194,7 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleChange}
-                      placeholder={strings.lastNamePlaceholder || 'e.g. Sharma'}
+                      placeholder={strings.lastNamePlaceholder || 'e.g. Doe'}
                       className={`w-full px-4 py-3.5 rounded-xl text-sm text-brand-navy bg-white border border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 outline-none transition-premium placeholder-brand-slateLight/75 ${
                         errors.lastName ? 'border-brand-red focus:border-brand-red focus:ring-brand-red/5' : ''
                       }`}
@@ -212,7 +216,7 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder={strings.emailPlaceholder || 'rahul@example.com'}
+                    placeholder={strings.emailPlaceholder || 'john.doe@example.com'}
                     className={`w-full px-4 py-3.5 rounded-xl text-sm text-brand-navy bg-white border border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 outline-none transition-premium placeholder-brand-slateLight/75 ${
                       errors.email ? 'border-brand-red focus:border-brand-red focus:ring-brand-red/5' : ''
                     }`}
@@ -254,7 +258,7 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder={strings.phonePlaceholder || '9876543210'}
+                      placeholder={strings.phonePlaceholder || '9856XXXXXX'}
                       className={`w-full px-4 py-3.5 rounded-xl text-sm text-brand-navy bg-white border border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 outline-none transition-premium placeholder-brand-slateLight/75 ${
                         errors.phone ? 'border-brand-red focus:border-brand-red focus:ring-brand-red/5' : ''
                       }`}
@@ -266,35 +270,37 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
                 </div>
 
                 {/* Already Own Property Checkbox */}
-                <div className="flex items-center py-1">
-                  <label className="relative flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      id="alreadyOwn"
-                      name="alreadyOwn"
-                      checked={formData.alreadyOwn}
-                      onChange={(e) => {
-                        setFormData({
-                          ...formData,
-                          alreadyOwn: e.target.checked
-                        });
-                      }}
-                      className="peer sr-only"
-                    />
-                    <div className={`w-5.5 h-5.5 rounded-lg border-2 flex items-center justify-center text-white transition-premium shadow-sm group-hover:border-brand-primaryLight ${
-                      formData.alreadyOwn 
-                        ? 'bg-brand-primary border-brand-primary' 
-                        : 'border-brand-border bg-white'
-                    }`}>
-                      <Check className={`w-3.5 h-3.5 stroke-[3.5] transition-opacity duration-200 ${
-                        formData.alreadyOwn ? 'opacity-100' : 'opacity-0'
-                      }`} />
-                    </div>
-                    <span className="text-sm font-semibold text-brand-navy select-none transition-premium group-hover:text-brand-primary">
-                      {strings.alreadyOwnLabel || 'Already Own Property'}
-                    </span>
-                  </label>
-                </div>
+                {showCheckbox && (
+                  <div className="flex items-center py-1">
+                    <label className="relative flex items-center gap-3 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        id="alreadyOwn"
+                        name="alreadyOwn"
+                        checked={formData.alreadyOwn}
+                        onChange={(e) => {
+                          setFormData({
+                            ...formData,
+                            alreadyOwn: e.target.checked
+                          });
+                        }}
+                        className="peer sr-only"
+                      />
+                      <div className={`w-5.5 h-5.5 rounded-lg border-2 flex items-center justify-center text-white transition-premium shadow-sm group-hover:border-brand-primaryLight ${
+                        formData.alreadyOwn 
+                          ? 'bg-brand-primary border-brand-primary' 
+                          : 'border-brand-border bg-white'
+                      }`}>
+                        <Check className={`w-3.5 h-3.5 stroke-[3.5] transition-opacity duration-200 ${
+                          formData.alreadyOwn ? 'opacity-100' : 'opacity-0'
+                        }`} />
+                      </div>
+                      <span className="text-sm font-semibold text-brand-navy select-none transition-premium group-hover:text-brand-primary">
+                        {strings.alreadyOwnLabel || 'Already Own Property'}
+                      </span>
+                    </label>
+                  </div>
+                )}
 
 
 

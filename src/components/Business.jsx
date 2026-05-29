@@ -230,7 +230,7 @@ export default function Business({ inlineForm = false }) {
                         <div className="relative">
                           <input
                             type="text"
-                            placeholder="e.g. Vikram Sen"
+                            placeholder="e.g. John Doe"
                             value={form.name}
                             onChange={(e) =>
                               handleFieldChange("name", e.target.value)
@@ -260,7 +260,7 @@ export default function Business({ inlineForm = false }) {
                         <div className="relative">
                           <input
                             type="text"
-                            placeholder="e.g. 9876543210"
+                            placeholder="9856XXXXXX"
                             value={form.phone}
                             onChange={(e) =>
                               handleFieldChange("phone", e.target.value)

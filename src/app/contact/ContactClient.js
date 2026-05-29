@@ -158,7 +158,7 @@ export default function ContactClient() {
                   <div className="relative">
                     <input
                       type="text"
-                      placeholder="e.g. Rahul Sharma"
+                      placeholder="e.g. John Doe"
                       value={form.name}
                       onChange={(e) => handleFieldChange('name', e.target.value)}
                       className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
@@ -187,7 +187,7 @@ export default function ContactClient() {
                     <div className="relative">
                       <input
                         type="email"
-                        placeholder="demo@example.com"
+                        placeholder="john.doe@example.com"
                         value={form.email}
                         onChange={(e) => handleFieldChange('email', e.target.value)}
                         className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
@@ -214,7 +214,7 @@ export default function ContactClient() {
                     <div className="relative">
                       <input
                         type="text"
-                        placeholder="e.g. 9876543210"
+                        placeholder="9856XXXXXX"
                         value={form.phone}
                         onChange={(e) => handleFieldChange('phone', e.target.value)}
                         className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
