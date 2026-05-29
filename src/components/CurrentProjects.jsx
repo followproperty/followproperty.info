@@ -10,7 +10,7 @@ export default function CurrentProjects() {
   
   const projectsData = contentData.projectsSection || {};
   const projectsList = projectsData.items || [];
-  const badgeText = projectsData.badge || '★ CURRENT PROJECTS';
+  const badgeText = projectsData.badge || 'CURRENT PROJECTS';
   const titleText = projectsData.title || 'Institutional Project Offerings';
   const subtitleText = projectsData.subtitle || 'Discover verified residential, plotting, and commercial projects across key Indian micro-markets.';
 
