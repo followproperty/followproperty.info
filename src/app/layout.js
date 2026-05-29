@@ -2,12 +2,28 @@ import "./globals.css";
 import Script from "next/script";
 
 export const metadata = {
-  title: "FollowProperty — Track Any Property in India Like an Investment",
+  title: "FollowProperty | Real Estate Advisory Built for Modern India",
+
   description:
-    "Smart real-estate tracking and insights for Gurgaon property buyers and owners. Engineered for complete transparency.",
+    "FollowProperty helps buyers, developers, and businesses make informed property decisions through advisory services, due diligence, project intelligence, and technology-driven real-estate solutions.",
 
   icons: {
     icon: "/icon.svg",
+  },
+
+  openGraph: {
+    title: "FollowProperty | Real Estate Advisory Built for Modern India",
+    description:
+      "FollowProperty helps buyers, developers, and businesses make informed property decisions through advisory services, due diligence, project intelligence, and technology-driven real-estate solutions.",
+    type: "website",
+    siteName: "FollowProperty",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "FollowProperty | Real Estate Advisory Built for Modern India",
+    description:
+      "FollowProperty helps buyers, developers, and businesses make informed property decisions through advisory services, due diligence, project intelligence, and technology-driven real-estate solutions.",
   },
 };
 
