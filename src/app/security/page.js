@@ -1,6 +1,7 @@
 import React from 'react';
 import PageLayout from '../../components/PageLayout';
 import { Lock } from 'lucide-react';
+import contentData from '../../data/content.json';
 
 export const metadata = {
   title: "Security Registry & Ledgers | FollowProperty",
@@ -8,6 +9,7 @@ export const metadata = {
 };
 
 export default function SecurityPage() {
+  const contact = contentData.contactDetails || {};
   return (
     <PageLayout>
       <section className="relative py-20 md:py-28 overflow-hidden bg-white border-b border-brand-borderMid/10 flex flex-col items-center justify-center min-h-[600px]">
@@ -69,7 +71,7 @@ export default function SecurityPage() {
               <li>Automated server firewalls and rate-limiting blocks.</li>
             </ul>
             <p>
-              To report a technical vulnerability or query data safeguard practices, contact our security operations desk at <a href="mailto:security@followproperty.com" className="text-brand-primary font-bold hover:underline">security@followproperty.com</a>.
+              To report a technical vulnerability or query data safeguard practices, contact our security operations desk at <a href={`mailto:${contact.email || 'ifollowproperty@gmail.com'}`} className="text-brand-primary font-bold hover:underline">{contact.email || 'ifollowproperty@gmail.com'}</a>.
             </p>
           </div>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle2, User, PhoneCall, MessageSquare } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, Check, Lock } from 'lucide-react';
 import contentData from '../../data/content.json';
 
 export default function ContactClient() {
@@ -164,7 +164,7 @@ export default function ContactClient() {
           </div>
 
           {/* Right Column: Interactive Form */}
-          <div className="lg:col-span-7 w-full bg-white border border-brand-border/40 rounded-3xl p-6 sm:p-10 shadow-brand">
+          <div className="lg:col-span-7 w-full bg-brand-bgAlt border border-brand-border/40 rounded-3xl p-6 sm:p-8">
             {submitted ? (
               <div className="py-10 text-center flex flex-col items-center animate-fadeIn">
                 <div className="w-14 h-14 rounded-full bg-brand-primaryBg border border-brand-primaryBorder/40 flex items-center justify-center text-brand-primary mb-5 shrink-0 animate-bounce">
@@ -184,13 +184,15 @@ export default function ContactClient() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5 text-left">
-                <h3 className="text-lg sm:text-xl font-extrabold text-brand-navy tracking-tight font-sans mb-1">
-                  Send a Message
-                </h3>
-                <p className="text-xs text-brand-slate font-normal mb-4">
-                  Please fill out the details below and we will get back to you shortly.
-                </p>
+              <form onSubmit={handleSubmit} className="space-y-3.5 text-left">
+                <div className="mb-4">
+                  <h3 className="text-lg font-bold text-brand-navy tracking-tight font-sans">
+                    Send a Message
+                  </h3>
+                  <p className="text-xs text-brand-slate font-normal mt-0.5">
+                    Please fill out the details below and we will get back to you shortly.
+                  </p>
+                </div>
 
                 {/* First Name & Last Name */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -198,23 +200,18 @@ export default function ContactClient() {
                     <label htmlFor="firstName" className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
                       First Name <span className="text-brand-primary">*</span>
                     </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        id="firstName"
-                        placeholder="e.g. John"
-                        value={form.firstName}
-                        onChange={(e) => handleFieldChange('firstName', e.target.value)}
-                        className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
-                          errors.firstName
-                            ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
-                            : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
-                        }`}
-                      />
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-brand-slateLight">
-                        <User className="w-4 h-4" />
-                      </div>
-                    </div>
+                    <input
+                      type="text"
+                      id="firstName"
+                      placeholder="e.g. John"
+                      value={form.firstName}
+                      onChange={(e) => handleFieldChange('firstName', e.target.value)}
+                      className={`w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
+                        errors.firstName
+                          ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
+                          : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
+                      }`}
+                    />
                     {errors.firstName && (
                       <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans">
                         {errors.firstName}
@@ -226,23 +223,18 @@ export default function ContactClient() {
                     <label htmlFor="lastName" className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
                       Last Name <span className="text-brand-primary">*</span>
                     </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        id="lastName"
-                        placeholder="e.g. Doe"
-                        value={form.lastName}
-                        onChange={(e) => handleFieldChange('lastName', e.target.value)}
-                        className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
-                          errors.lastName
-                            ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
-                            : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
-                        }`}
-                      />
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-brand-slateLight">
-                        <User className="w-4 h-4" />
-                      </div>
-                    </div>
+                    <input
+                      type="text"
+                      id="lastName"
+                      placeholder="e.g. Doe"
+                      value={form.lastName}
+                      onChange={(e) => handleFieldChange('lastName', e.target.value)}
+                      className={`w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
+                        errors.lastName
+                          ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
+                          : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
+                      }`}
+                    />
                     {errors.lastName && (
                       <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans">
                         {errors.lastName}
@@ -256,23 +248,18 @@ export default function ContactClient() {
                   <label htmlFor="email" className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
                     Email Address <span className="text-brand-primary">*</span>
                   </label>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      id="email"
-                      placeholder="john.doe@example.com"
-                      value={form.email}
-                      onChange={(e) => handleFieldChange('email', e.target.value)}
-                      className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
-                        errors.email
-                          ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
-                          : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
-                      }`}
-                    />
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-brand-slateLight">
-                      <Mail className="w-4 h-4" />
-                    </div>
-                  </div>
+                  <input
+                    type="email"
+                    id="email"
+                    placeholder="john.doe@example.com"
+                    value={form.email}
+                    onChange={(e) => handleFieldChange('email', e.target.value)}
+                    className={`w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
+                      errors.email
+                        ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
+                        : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
+                    }`}
+                  />
                   {errors.email && (
                     <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans">
                       {errors.email}
@@ -281,28 +268,23 @@ export default function ContactClient() {
                 </div>
 
                 {/* City & Phone Number */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="city" className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
                       City <span className="text-brand-primary">*</span>
                     </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        id="city"
-                        placeholder="e.g. Gurgaon"
-                        value={form.city}
-                        onChange={(e) => handleFieldChange('city', e.target.value)}
-                        className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
-                          errors.city
-                            ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
-                            : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
-                        }`}
-                      />
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-brand-slateLight">
-                        <MapPin className="w-4 h-4" />
-                      </div>
-                    </div>
+                    <input
+                      type="text"
+                      id="city"
+                      placeholder="e.g. Gurgaon"
+                      value={form.city}
+                      onChange={(e) => handleFieldChange('city', e.target.value)}
+                      className={`w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
+                        errors.city
+                          ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
+                          : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
+                      }`}
+                    />
                     {errors.city && (
                       <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans">
                         {errors.city}
@@ -314,23 +296,18 @@ export default function ContactClient() {
                     <label htmlFor="phone" className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
                       Phone Number <span className="text-brand-primary">*</span>
                     </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        id="phone"
-                        placeholder="9856XXXXXX"
-                        value={form.phone}
-                        onChange={(e) => handleFieldChange('phone', e.target.value)}
-                        className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
-                          errors.phone
-                            ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
-                            : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
-                        }`}
-                      />
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-brand-slateLight">
-                        <PhoneCall className="w-4 h-4" />
-                      </div>
-                    </div>
+                    <input
+                      type="text"
+                      id="phone"
+                      placeholder="9856XXXXXX"
+                      value={form.phone}
+                      onChange={(e) => handleFieldChange('phone', e.target.value)}
+                      className={`w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans ${
+                        errors.phone
+                          ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
+                          : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
+                      }`}
+                    />
                     {errors.phone && (
                       <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans">
                         {errors.phone}
@@ -340,7 +317,7 @@ export default function ContactClient() {
                 </div>
 
                 {/* Already Own Property Checkbox */}
-                <div className="flex items-center py-1">
+                <div className="flex items-center py-0.5">
                   <label className="relative flex items-center gap-3 cursor-pointer group">
                     <input
                       type="checkbox"
@@ -354,11 +331,11 @@ export default function ContactClient() {
                         ? 'bg-brand-primary border-brand-primary' 
                         : 'border-brand-border bg-white'
                     }`}>
-                      <CheckCircle2 className={`w-3.5 h-3.5 transition-opacity duration-200 ${
+                      <Check className={`w-3.5 h-3.5 transition-opacity duration-200 ${
                         form.alreadyOwn ? 'opacity-100' : 'opacity-0'
                       }`} />
                     </div>
-                    <span className="text-xs sm:text-sm font-semibold text-brand-navy select-none transition-premium group-hover:text-brand-primary">
+                    <span className="text-xs sm:text-sm font-semibold text-brand-navy select-none transition-premium group-hover:text-brand-primary font-sans">
                       Own Property in Gurgaon
                     </span>
                   </label>
@@ -369,23 +346,18 @@ export default function ContactClient() {
                   <label htmlFor="message" className="block text-[10px] font-bold uppercase tracking-wider text-brand-navy mb-1.5 font-sans">
                     Your Message <span className="text-brand-primary">*</span>
                   </label>
-                  <div className="relative">
-                    <textarea
-                      id="message"
-                      rows={4}
-                      placeholder="Please describe your query in detail..."
-                      value={form.message}
-                      onChange={(e) => handleFieldChange('message', e.target.value)}
-                      className={`w-full pl-9 pr-4 py-3 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans resize-none ${
-                        errors.message
-                          ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
-                          : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
-                      }`}
-                    ></textarea>
-                    <div className="absolute top-3 left-3.5 text-brand-slateLight">
-                      <MessageSquare className="w-4 h-4" />
-                    </div>
-                  </div>
+                  <textarea
+                    id="message"
+                    rows={3}
+                    placeholder="Please describe your query in detail..."
+                    value={form.message}
+                    onChange={(e) => handleFieldChange('message', e.target.value)}
+                    className={`w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm text-brand-navy bg-white border outline-none transition-premium font-sans resize-none ${
+                      errors.message
+                        ? "border-brand-red focus:ring-4 focus:ring-brand-red/10"
+                        : "border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5"
+                    }`}
+                  ></textarea>
                   {errors.message && (
                     <span className="text-[10px] text-brand-red font-semibold mt-1 block font-sans">
                       {errors.message}
@@ -418,6 +390,12 @@ export default function ContactClient() {
                     </>
                   )}
                 </button>
+
+                {/* Privacy Lock footer */}
+                <div className="flex items-center justify-center gap-1.5 text-[10px] text-brand-slateLight pt-2">
+                  <Lock className="w-3 h-3" />
+                  Your inquiries are protected under institutional privacy ledgers.
+                </div>
               </form>
             )}
           </div>

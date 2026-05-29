@@ -3,9 +3,11 @@
 import React from 'react';
 import { useLeadForm } from '../../lib/LeadFormContext';
 import { Briefcase, Clock, ArrowRight, Sparkles } from 'lucide-react';
+import contentData from '../../data/content.json';
 
 export default function CareersClient({ positions = [] }) {
   const { openLeadForm } = useLeadForm();
+  const contact = contentData.contactDetails || {};
 
   return (
     <section className="relative py-20 md:py-28 overflow-hidden bg-white border-b border-brand-borderMid/10 flex flex-col items-center justify-center min-h-[600px]">
@@ -96,10 +98,10 @@ export default function CareersClient({ positions = [] }) {
           <p className="text-xs sm:text-sm text-brand-slateLight font-medium font-sans">
             Don't see a matching position? Send your resume and interest area to{" "}
             <a 
-              href="mailto:careers@followproperty.com" 
+              href={`mailto:${contact.email || 'ifollowproperty@gmail.com'}`} 
               className="text-brand-primary font-bold hover:underline"
             >
-              careers@followproperty.com
+              {contact.email || 'ifollowproperty@gmail.com'}
             </a>
           </p>
         </div>

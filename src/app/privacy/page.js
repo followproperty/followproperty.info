@@ -1,6 +1,7 @@
 import React from 'react';
 import PageLayout from '../../components/PageLayout';
 import { Shield } from 'lucide-react';
+import contentData from '../../data/content.json';
 
 export const metadata = {
   title: "Privacy Policy | FollowProperty",
@@ -8,6 +9,7 @@ export const metadata = {
 };
 
 export default function PrivacyPage() {
+  const contact = contentData.contactDetails || {};
   return (
     <PageLayout>
       <section className="relative py-20 md:py-28 overflow-hidden bg-white border-b border-brand-borderMid/10 flex flex-col items-center justify-center min-h-[600px]">
@@ -77,7 +79,7 @@ export default function PrivacyPage() {
               5. Your Rights and Opt-Out Options
             </h3>
             <p>
-              You maintain complete ownership of your personal data. You may contact our data privacy officer at any time to request access to, correction of, or complete deletion of your records from our databases by writing to <a href="mailto:privacy@followproperty.com" className="text-brand-primary font-bold hover:underline">privacy@followproperty.com</a>.
+              You maintain complete ownership of your personal data. You may contact our data privacy officer at any time to request access to, correction of, or complete deletion of your records from our databases by writing to <a href={`mailto:${contact.email || 'ifollowproperty@gmail.com'}`} className="text-brand-primary font-bold hover:underline">{contact.email || 'ifollowproperty@gmail.com'}</a>.
             </p>
           </div>
         </div>
