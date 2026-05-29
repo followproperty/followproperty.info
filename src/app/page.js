@@ -4,8 +4,9 @@ import About from '../components/About';
 import HomeClient from './HomeClient';
 
 export const metadata = {
-  title: "FollowProperty — Track Any Property in India Like an Investment",
-  description: "Smart real-estate tracking and insights for Gurgaon property buyers and owners. Engineered for complete transparency.",
+  title: "FollowProperty | Real Estate Advisory Built for Modern India",
+  description:
+    "FollowProperty helps buyers, developers, and businesses make informed property decisions through advisory services, due diligence, project intelligence, and technology-driven real-estate solutions.",
 };
 
 export default function RootPage() {
