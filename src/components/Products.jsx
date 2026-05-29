@@ -92,7 +92,7 @@ export default function Products({ onOpenLeadForm }) {
 
                   {/* CTA Action Trigger */}
                   <button
-                    onClick={onOpenLeadForm}
+                    onClick={() => onOpenLeadForm({ leadSource: 'waitlist' })}
                     className="w-full sm:w-auto max-w-xs sm:max-w-none px-5.5 py-2 sm:px-7 sm:py-2.5 rounded-full font-bold text-xs sm:text-sm tracking-widest uppercase bg-white text-brand-navy border border-brand-navy/80 hover:bg-brand-navy hover:text-white hover:border-brand-navy shadow-sm hover:-translate-y-0.5 active:translate-y-0 hover:scale-[1.012] active:scale-[0.988] transition-premium flex items-center justify-center gap-2.5 cursor-pointer font-sans"
                   >
                     {product.ctaText}

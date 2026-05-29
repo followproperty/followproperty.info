@@ -4,7 +4,7 @@ import clientPromise from '../../../lib/mongodb';
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { firstName, lastName, email, city, phone, leadSource } = body;
+    const { firstName, lastName, email, city, phone, alreadyOwn, leadSource, projectName } = body;
 
     // Server-side validation
     if (!firstName || !firstName.trim()) {
@@ -29,18 +29,23 @@ export async function POST(request) {
       return NextResponse.json({ success: false, message: 'Please enter a valid 10-digit phone number' }, { status: 400 });
     }
 
-    // Connect to MongoDB Atlas
+    // Connect to MongoDB Atlas via connection pool client promise
     const client = await clientPromise;
     const db = client.db('followproperty');
-    const collection = db.collection('waitlist');
+    const collection = db.collection('leads');
 
     // De-duplicate email submissions
     const normalizedEmail = email.trim().toLowerCase();
-    const existing = await collection.findOne({ email: normalizedEmail });
+    const existing = await collection.findOne({ 
+      email: normalizedEmail,
+      projectName: projectName ? projectName.trim() : null
+    });
     if (existing) {
       return NextResponse.json({
         success: false,
-        message: 'This email is already registered on our early access waitlist.'
+        message: projectName
+          ? `You have already registered your interest for ${projectName} with this email.`
+          : 'This email is already registered on our lead registry.'
       }, { status: 400 });
     }
 
@@ -51,7 +56,9 @@ export async function POST(request) {
       email: normalizedEmail,
       city: city.trim(),
       phone: phone.trim(),
-      leadSource: leadSource ? leadSource.trim() : 'waitlist',
+      alreadyOwn: typeof alreadyOwn === 'boolean' ? alreadyOwn : false,
+      leadSource: leadSource ? leadSource.trim() : 'general',
+      projectName: projectName ? projectName.trim() : null,
       registeredAt: new Date()
     };
 
@@ -59,12 +66,12 @@ export async function POST(request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Successfully registered for waitlist early access.',
+      message: 'Successfully registered your requirements.',
       registrationId: result.insertedId.toString()
     });
 
   } catch (error) {
-    console.error('Waitlist MongoDB API Error:', error);
+    console.error('Leads MongoDB API Error:', error);
     return NextResponse.json({
       success: false,
       message: 'Server database error. Please verify your connection config and try again.'

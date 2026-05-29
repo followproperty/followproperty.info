@@ -10,19 +10,23 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
   const strings = contentData.leadForm || {};
   const campaign = contentData.marketCampaign;
 
+  const isCareers = pathname === '/careers' || options?.leadSource === 'careers';
+  const isWaitlist = pathname === '/products' || options?.leadSource === 'waitlist';
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     city: '',
     phone: '',
-    alreadyOwn: false
+    alreadyOwn: false,
+    resumeLink: ''
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const showCheckbox = pathname !== '/current-projects' && !options?.projectName;
+  const showCheckbox = pathname !== '/current-projects' && !options?.projectName && !isCareers && !isWaitlist;
 
   if (!isOpen) return null;
 
@@ -54,13 +58,20 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = strings.errors?.emailInvalid || 'Please enter a valid email address';
     }
-    if (!formData.city.trim()) {
+    if (!isCareers && !formData.city.trim()) {
       newErrors.city = strings.errors?.cityRequired || 'City is required';
     }
     if (!formData.phone.trim()) {
       newErrors.phone = strings.errors?.phoneRequired || 'Phone number is required';
     } else if (!/^\d{10}$/.test(formData.phone.trim())) {
       newErrors.phone = strings.errors?.phoneInvalid || 'Please enter a valid 10-digit phone number';
+    }
+    if (isCareers) {
+      if (!formData.resumeLink || !formData.resumeLink.trim()) {
+        newErrors.resumeLink = 'Google Drive resume link is required';
+      } else if (!/^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(formData.resumeLink.trim())) {
+        newErrors.resumeLink = 'Please enter a valid resume URL link';
+      }
     }
     return newErrors;
   };
@@ -76,14 +87,29 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('/api/waitlist', {
+      const endpoint = isCareers ? '/api/careers' : (isWaitlist ? '/api/waitlist' : '/api/leads');
+      const payload = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        leadSource: options?.leadSource || (isCareers ? 'careers' : (isWaitlist ? 'waitlist' : 'general'))
+      };
+
+      if (isCareers) {
+        payload.resumeLink = formData.resumeLink;
+      } else {
+        payload.city = formData.city;
+        payload.alreadyOwn = formData.alreadyOwn;
+        if (options?.projectName) {
+          payload.projectName = options.projectName;
+        }
+      }
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          leadSource: options?.leadSource || 'general',
-          projectName: options?.projectName || null
-        })
+        body: JSON.stringify(payload)
       });
       const data = await response.json();
       
@@ -95,7 +121,8 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
           email: '',
           city: '',
           phone: '',
-          alreadyOwn: false
+          alreadyOwn: false,
+          resumeLink: ''
         });
       } else {
         setErrors({
@@ -146,17 +173,47 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
                     className="h-6 sm:h-7 w-auto object-contain" 
                   />
                 </div>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-brand-primaryBg border border-brand-primaryBorder/30 text-[9px] font-bold tracking-widest text-brand-primary uppercase mb-3">
-                  {options?.projectName ? '★ PROJECT INQUIRY' : (strings.waitlistBadge || '★ ADVISORY DESK')}
-                </div>
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-brand-navy tracking-tight font-sans mb-2">
-                  {options?.projectName ? `Inquire about ${options.projectName}` : (strings.title || 'Consult with Our Advisory Desk')}
-                </h3>
-                <p className="text-xs sm:text-sm text-brand-slate font-light leading-relaxed">
-                  {options?.projectName 
-                    ? `Register your interest for ${options.projectName}. A partner from our Gurgaon desk will contact you with pricing, layouts, and inventory updates.`
-                    : (strings.subtitle || 'Register your property requirements or developer alliance requests below. A partner from our Gurgaon desk will contact you.')}
-                </p>
+                {!isCareers && !isWaitlist && (
+                  <>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-brand-primaryBg border border-brand-primaryBorder/30 text-[9px] font-bold tracking-widest text-brand-primary uppercase mb-3">
+                      {options?.projectName ? '★ PROJECT INQUIRY' : (strings.waitlistBadge || '★ ADVISORY DESK')}
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-brand-navy tracking-tight font-sans mb-2">
+                      {options?.projectName ? `Inquire about ${options.projectName}` : (strings.title || 'Consult with Our Advisory Desk')}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-brand-slate font-light leading-relaxed">
+                      {options?.projectName 
+                        ? `Register your interest for ${options.projectName}. A partner from our Gurgaon desk will contact you with pricing, layouts, and inventory updates.`
+                        : (strings.subtitle || 'Register your property requirements or developer alliance requests below. A partner from our Gurgaon desk will contact you.')}
+                    </p>
+                  </>
+                )}
+                {isCareers && (
+                  <>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-brand-primaryBg border border-brand-primaryBorder/30 text-[9px] font-bold tracking-widest text-brand-primary uppercase mb-3">
+                      ★ CAREER APPLICATION
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-brand-navy tracking-tight font-sans mb-2">
+                      {options?.jobTitle ? `Apply for ${options.jobTitle}` : 'Submit Your Application'}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-brand-slate font-light leading-relaxed">
+                      Please enter your student/applicant details and Google Drive resume link below.
+                    </p>
+                  </>
+                )}
+                {isWaitlist && (
+                  <>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-brand-primaryBg border border-brand-primaryBorder/30 text-[9px] font-bold tracking-widest text-brand-primary uppercase mb-3">
+                      ★ PRODUCT WAITLIST
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-brand-navy tracking-tight font-sans mb-2">
+                      Join Early Access Waitlist
+                    </h3>
+                    <p className="text-xs sm:text-sm text-brand-slate font-light leading-relaxed">
+                      Get early access and updates when the FollowProperty Intelligence Platform launches.
+                    </p>
+                  </>
+                )}
               </div>
 
               {/* Form Input fields */}
@@ -226,48 +283,93 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
                   )}
                 </div>
 
-                {/* City & Phone Number */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="city" className="block text-[10px] font-bold uppercase tracking-wider text-brand-slate mb-2 font-sans">
-                      {strings.cityLabel || 'City'} <span className="text-brand-red">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="city"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleChange}
-                      placeholder={strings.cityPlaceholder || 'e.g. Gurgaon'}
-                      className={`w-full px-4 py-3.5 rounded-xl text-sm text-brand-navy bg-white border border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 outline-none transition-premium placeholder-brand-slateLight/75 ${
-                        errors.city ? 'border-brand-red focus:border-brand-red focus:ring-brand-red/5' : ''
-                      }`}
-                    />
-                    {errors.city && (
-                      <p className="text-xs text-brand-red mt-1.5 font-semibold font-sans">{errors.city}</p>
-                    )}
-                  </div>
+                {/* City & Phone Number Grid (If not careers) */}
+                {!isCareers ? (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="city" className="block text-[10px] font-bold uppercase tracking-wider text-brand-slate mb-2 font-sans">
+                        {strings.cityLabel || 'City'} <span className="text-brand-red">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleChange}
+                        placeholder={strings.cityPlaceholder || 'e.g. Gurgaon'}
+                        className={`w-full px-4 py-3.5 rounded-xl text-sm text-brand-navy bg-white border border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 outline-none transition-premium placeholder-brand-slateLight/75 ${
+                          errors.city ? 'border-brand-red focus:border-brand-red focus:ring-brand-red/5' : ''
+                        }`}
+                      />
+                      {errors.city && (
+                        <p className="text-xs text-brand-red mt-1.5 font-semibold font-sans">{errors.city}</p>
+                      )}
+                    </div>
 
-                  <div>
-                    <label htmlFor="phone" className="block text-[10px] font-bold uppercase tracking-wider text-brand-slate mb-2 font-sans">
-                      {strings.phoneLabel || 'Phone Number'} <span className="text-brand-red">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      placeholder={strings.phonePlaceholder || '9856XXXXXX'}
-                      className={`w-full px-4 py-3.5 rounded-xl text-sm text-brand-navy bg-white border border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 outline-none transition-premium placeholder-brand-slateLight/75 ${
-                        errors.phone ? 'border-brand-red focus:border-brand-red focus:ring-brand-red/5' : ''
-                      }`}
-                    />
-                    {errors.phone && (
-                      <p className="text-xs text-brand-red mt-1.5 font-semibold font-sans">{errors.phone}</p>
-                    )}
+                    <div>
+                      <label htmlFor="phone" className="block text-[10px] font-bold uppercase tracking-wider text-brand-slate mb-2 font-sans">
+                        {strings.phoneLabel || 'Phone Number'} <span className="text-brand-red">*</span>
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        placeholder={strings.phonePlaceholder || '9856XXXXXX'}
+                        className={`w-full px-4 py-3.5 rounded-xl text-sm text-brand-navy bg-white border border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 outline-none transition-premium placeholder-brand-slateLight/75 ${
+                          errors.phone ? 'border-brand-red focus:border-brand-red focus:ring-brand-red/5' : ''
+                        }`}
+                      />
+                      {errors.phone && (
+                        <p className="text-xs text-brand-red mt-1.5 font-semibold font-sans">{errors.phone}</p>
+                      )}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  /* Careers Fields: Phone Number & Resume Link */
+                  <div className="space-y-5">
+                    <div>
+                      <label htmlFor="phone" className="block text-[10px] font-bold uppercase tracking-wider text-brand-slate mb-2 font-sans">
+                        {strings.phoneLabel || 'Phone Number'} <span className="text-brand-red">*</span>
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        placeholder={strings.phonePlaceholder || '9856XXXXXX'}
+                        className={`w-full px-4 py-3.5 rounded-xl text-sm text-brand-navy bg-white border border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 outline-none transition-premium placeholder-brand-slateLight/75 ${
+                          errors.phone ? 'border-brand-red focus:border-brand-red focus:ring-brand-red/5' : ''
+                        }`}
+                      />
+                      {errors.phone && (
+                        <p className="text-xs text-brand-red mt-1.5 font-semibold font-sans">{errors.phone}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label htmlFor="resumeLink" className="block text-[10px] font-bold uppercase tracking-wider text-brand-slate mb-2 font-sans">
+                        Google Drive Resume Link <span className="text-brand-red">*</span>
+                      </label>
+                      <input
+                        type="url"
+                        id="resumeLink"
+                        name="resumeLink"
+                        value={formData.resumeLink}
+                        onChange={handleChange}
+                        placeholder="e.g. https://drive.google.com/..."
+                        className={`w-full px-4 py-3.5 rounded-xl text-sm text-brand-navy bg-white border border-brand-border/40 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 outline-none transition-premium placeholder-brand-slateLight/75 ${
+                          errors.resumeLink ? 'border-brand-red focus:border-brand-red focus:ring-brand-red/5' : ''
+                        }`}
+                      />
+                      {errors.resumeLink && (
+                        <p className="text-xs text-brand-red mt-1.5 font-semibold font-sans">{errors.resumeLink}</p>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {/* Already Own Property Checkbox */}
                 {showCheckbox && (
@@ -302,8 +404,6 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
                   </div>
                 )}
 
-
-
                 {/* Submission Error Banner */}
                 {errors.submit && (
                   <p className="text-xs text-brand-red text-center font-bold font-sans bg-brand-redBg border border-brand-red/10 py-2.5 px-4 rounded-xl">
@@ -324,7 +424,7 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
                     </>
                   ) : (
                     <>
-                      {ctaText || strings.buttonText || 'Get Early Access'}
+                      {isCareers ? 'Submit Application' : (isWaitlist ? 'Join Waitlist' : (ctaText || strings.buttonText || 'Get Early Access'))}
                       <ArrowRight className="w-3.5 h-3.5" />
                     </>
                   )}
@@ -344,12 +444,16 @@ export default function LeadForm({ isOpen, onClose, ctaText, options }) {
                 <Check className="w-8 h-8 stroke-[3]" />
               </div>
               <h3 className="text-2xl font-extrabold text-brand-navy mb-3 font-sans tracking-tight">
-                {options?.projectName ? 'Registration Received!' : (strings.successTitle || 'Successfully Registered!')}
+                {isCareers ? 'Application Received!' : (isWaitlist ? 'Waitlist Registration Received!' : (options?.projectName ? 'Registration Received!' : (strings.successTitle || 'Successfully Registered!')))}
               </h3>
               <p className="text-sm text-brand-slate font-light leading-relaxed mb-8 max-w-sm mx-auto font-sans">
-                {options?.projectName 
-                  ? `Thank you for registering interest in ${options.projectName}. An advisory partner will contact you shortly.`
-                  : (strings.successSubtitle || 'Thank you for registering. An advisory partner will contact you shortly to review your requirements.')}
+                {isCareers 
+                  ? 'Thank you for applying. A hiring partner from our team will review your student/candidate profile and contact you shortly.'
+                  : (isWaitlist 
+                    ? 'Thank you for joining our product launch early access waitlist. We will notify you as soon as the platform goes live.'
+                    : (options?.projectName 
+                      ? `Thank you for registering interest in ${options.projectName}. An advisory partner will contact you shortly.`
+                      : (strings.successSubtitle || 'Thank you for registering. An advisory partner will contact you shortly to review your requirements.')))}
               </p>
               <button
                 onClick={() => {

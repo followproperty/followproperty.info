@@ -80,7 +80,7 @@ export default function CareersClient({ positions = [] }) {
               {/* Action Button */}
               <div className="shrink-0 flex items-center md:justify-end">
                 <button
-                  onClick={openLeadForm}
+                  onClick={() => openLeadForm({ leadSource: 'careers', jobTitle: job.title })}
                   className="w-full sm:w-auto px-5 py-2.5 rounded-full font-bold text-xs tracking-widest uppercase bg-white text-brand-navy border border-brand-navy/80 hover:bg-brand-navy hover:text-white hover:border-brand-navy shadow-sm transition-premium flex items-center justify-center gap-2 cursor-pointer font-sans"
                 >
                   Apply Now
