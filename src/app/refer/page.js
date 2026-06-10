@@ -639,11 +639,13 @@ export default function ReferPage() {
             Refer Now
           </a>
           <a 
-            href="tel:+918796508866" 
-            className="w-11 h-11 rounded-full bg-white flex items-center justify-center shrink-0 shadow-md transition hover:scale-105"
+            href="https://wa.me/918796508866?text=Hi%2C%20I%27d%20like%20to%20refer%20a%20buyer%20for%20BPTP%20Downtown." 
+            target="_blank"
+            rel="noreferrer"
+            className="w-11 h-11 rounded-full bg-[#22C55E] flex items-center justify-center shrink-0 shadow-md transition hover:scale-105"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#f5642b]">
-              <path fillRule="evenodd" d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c-.135.101-.18.282-.108.43a13.54 13.54 0 0 0 5.606 5.606c.148.072.33.027.43-.108l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z" clipRule="evenodd" />
+            <svg className="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.451L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.582 2.052 14.12 1.01 11.493 1.01 6.059 1.01 1.633 5.381 1.63 10.81c-.001 1.639.429 3.236 1.246 4.646L1.879 21.36l6.012-1.574L6.647 19.15z" />
             </svg>
           </a>
         </div>
