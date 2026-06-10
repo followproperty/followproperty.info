@@ -15,16 +15,18 @@
     "logo": "FollowProperty",
     "links": [
       "About Us",
+      "Refer a Friend",
       "Services",
       "Products",
       "Current Projects",
-      "Team",
+      "Locate Us",
+      "Contact Us",
+      "Our Team",
       "FAQ",
       "Press Release",
       "Careers",
-      "Business Owner",
-      "Locate Us",
-      "Contact Us"
+      "Business Owner"
+
     ],
     "ctaText": "Advisory Desk"
   },

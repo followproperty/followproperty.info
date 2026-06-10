@@ -26,9 +26,10 @@ export default function Navbar({ data, ctaText, onOpenLeadForm }) {
   const getLinkPath = (link) => {
     const normalized = link.toLowerCase().trim();
     if (normalized === 'about us' || normalized === 'about') return '/';
+    if (normalized === 'refer a friend' || normalized === 'refer') return '/refer';
     if (normalized === 'services') return '/services';
     if (normalized === 'products') return '/products';
-    if (normalized === 'team') return '/team';
+    if (normalized === 'team' || normalized === 'our team') return '/team';
     if (normalized === 'faq' || normalized === 'faqs') return '/faq';
     if (normalized === 'press release' || normalized === 'press releases' || normalized === 'press') return '/press-releases';
     if (normalized === 'careers') return '/careers';
@@ -38,8 +39,14 @@ export default function Navbar({ data, ctaText, onOpenLeadForm }) {
     return `/${normalized.replace(/[^a-z0-9]+/g, '-')}`;
   };
 
-  const primaryLinks = ['About Us', 'Services', 'Products', 'Current Projects', 'Team', 'Business Owner'];
-  const dropdownLinks = ['FAQ', 'Press Release', 'Careers', 'Locate Us', 'Contact Us'];
+  const primaryLinks = ['About Us', 'Refer a Friend', 'Services', 'Products', 'Current Projects', 'Locate Us', 'Contact Us'];
+  const dropdownLinks = [
+      "Our Team",
+      "FAQ",
+      "Press Release",
+      "Careers",
+      "Business Owner"
+    ];
 
   return (
     <nav className={`fixed top-0 left-0 w-full z-40 transition-premium ${

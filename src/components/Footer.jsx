@@ -15,6 +15,7 @@ export default function Footer({ data, navbarLinks }) {
   const getLinkPath = (link) => {
     const normalized = link.toLowerCase().trim();
     if (normalized === 'about us' || normalized === 'about') return '/';
+    if (normalized === 'refer a friend' || normalized === 'refer') return '/refer';
     if (normalized === 'services') return '/services';
     if (normalized === 'products') return '/products';
     if (normalized === 'team') return '/team';
