@@ -36,30 +36,15 @@ const PAGES = [
   { url: '/locate-us', title: 'Locate Us', description: 'Office address and location details.', category: 'Company', icon: MapPin },
   { url: '/privacy', title: 'Privacy Policy', description: 'Data privacy and security guidelines.', category: 'Legal', icon: ShieldCheck },
   { url: '/terms', title: 'Terms of Use', description: 'Terms and conditions for FollowProperty.', category: 'Legal', icon: FileText },
-  { url: '/security', title: 'Security Protocol', description: 'B2B registration and compliance security.', category: 'Legal', strokeWidth: 1.5, icon: ShieldCheck }
-];
-
-const FUNNY_MESSAGES = [
-  "Even our legal compliance desk couldn't trace these coordinates.",
-  "This plot is off-market... literally.",
-  "We ran a full title search. This page doesn't exist on the map.",
-  "404: Land acquisition failed. The page has been demolished.",
-  "Our surveyors checked the blueprint. Seems this sector is still under construction."
+  { url: '/security', title: 'Security Protocol', description: 'B2B registration and compliance security.', category: 'Legal', icon: ShieldCheck }
 ];
 
 export default function NotFound() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [randomMessage, setRandomMessage] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
-
-  // Set a random funny message on mount
-  useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * FUNNY_MESSAGES.length);
-    setRandomMessage(FUNNY_MESSAGES[randomIndex]);
-  }, []);
 
   // Filter pages based on search query
   const filteredPages = useMemo(() => {
@@ -108,133 +93,27 @@ export default function NotFound() {
 
   return (
     <PageLayout>
-      <section className="relative py-16 md:py-24 overflow-hidden bg-white border-b border-brand-borderMid/10 flex flex-col items-center justify-center min-h-[85vh]">
+      <section className="relative py-20 md:py-28 overflow-hidden bg-white border-b border-brand-borderMid/10 flex flex-col items-center justify-center min-h-[80vh]">
         {/* Modern structural dot mesh background */}
         <div className="absolute inset-0 bg-dot-mesh pointer-events-none z-0"></div>
 
         {/* Decorative glows */}
-        <div className="absolute top-1/4 left-1/4 w-[320px] h-[320px] bg-brand-primary/2 rounded-full blur-[90px] pointer-events-none z-0 animate-pulse-slow"></div>
+        <div className="absolute top-1/4 left-1/4 w-[320px] h-[320px] bg-brand-primary/2 rounded-full blur-[90px] pointer-events-none z-0"></div>
         <div className="absolute bottom-1/4 right-1/4 w-[280px] h-[280px] bg-brand-teal/2 rounded-full blur-[95px] pointer-events-none z-0"></div>
 
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 relative z-10 w-full text-center flex flex-col items-center">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 relative z-10 w-full text-center flex flex-col items-center">
           
-          {/* Professional Yet Funny Custom SVG Animation */}
-          <div className="w-full max-w-[280px] md:max-w-[340px] mb-8 select-none relative group">
-            {/* Blueprint Grid background container */}
-            <div className="absolute inset-0 bg-brand-primary/5 rounded-2xl border border-brand-primary/10 -rotate-1 scale-105 pointer-events-none transition-all duration-500 group-hover:rotate-0"></div>
-            
-            <svg 
-              viewBox="0 0 400 300" 
-              className="w-full h-auto relative z-10 filter drop-shadow-md"
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Grid Lines */}
-              <path d="M 50,0 L 50,300 M 100,0 L 100,300 M 150,0 L 150,300 M 200,0 L 200,300 M 250,0 L 250,300 M 300,0 L 300,300 M 350,0 L 350,300" stroke="rgba(50, 95, 236, 0.08)" strokeWidth="1" />
-              <path d="M 0,50 L 400,50 M 0,100 L 400,100 M 0,150 L 400,150 M 0,200 L 400,200 M 0,250 L 400,250" stroke="rgba(50, 95, 236, 0.08)" strokeWidth="1" />
-              
-              {/* Compass Indicator (Rotating) */}
-              <g transform="translate(340, 60)" className="animate-spin" style={{ transformOrigin: '340px 60px', animationDuration: '20s' }}>
-                <circle cx="0" cy="0" r="20" stroke="rgba(50, 95, 236, 0.25)" strokeWidth="1.5" strokeDasharray="3 3" />
-                <line x1="0" y1="-25" x2="0" y2="25" stroke="rgba(50, 95, 236, 0.3)" strokeWidth="1" />
-                <line x1="-25" y1="0" x2="25" y2="0" stroke="rgba(50, 95, 236, 0.3)" strokeWidth="1" />
-                <polygon points="0,-18 5,0 0,5 -5,0" fill="var(--color-brand-primary, #325FEC)" opacity="0.6" />
-                <polygon points="0,18 5,0 0,-5 -5,0" fill="var(--color-brand-teal, #0284C7)" opacity="0.4" />
-              </g>
-
-              {/* The "404" Land Plot boundary line */}
-              <rect x="80" y="80" width="240" height="150" rx="12" stroke="var(--color-brand-primary, #325FEC)" strokeWidth="2.5" strokeDasharray="6 4" opacity="0.8" className="animate-pulse" />
-              
-              {/* Little Construction Crane swing arms */}
-              <g transform="translate(60, 240)">
-                {/* Vertical Tower */}
-                <line x1="20" y1="0" x2="20" y2="-120" stroke="#1E293B" strokeWidth="4" />
-                <line x1="10" y1="0" x2="20" y2="-40" stroke="#1E293B" strokeWidth="2" />
-                <line x1="30" y1="0" x2="20" y2="-40" stroke="#1E293B" strokeWidth="2" />
-                <line x1="10" y1="-40" x2="20" y2="-80" stroke="#1E293B" strokeWidth="2" />
-                <line x1="30" y1="-80" x2="20" y2="-120" stroke="#1E293B" strokeWidth="2" />
-                
-                {/* Cabin */}
-                <rect x="12" y="-128" width="16" height="16" rx="3" fill="#0F172A" />
-                
-                {/* Boom/Jib */}
-                <g className="origin-[20px_-120px]" style={{ animation: 'float 6s ease-in-out infinite' }}>
-                  <line x1="-30" y1="-120" x2="90" y2="-120" stroke="#0284C7" strokeWidth="3" />
-                  {/* Counterweight */}
-                  <rect x="-30" y="-123" width="12" height="8" fill="#475569" />
-                  {/* Trolley hook line */}
-                  <line x1="60" y1="-120" x2="60" y2="-80" stroke="#475569" strokeWidth="1.5" strokeDasharray="2 2" className="animate-bounce" />
-                  {/* Hook carrying a tiny "404" label */}
-                  <g transform="translate(42, -80)">
-                    <rect x="0" y="0" width="36" height="20" rx="4" fill="#325FEC" className="shadow-md" />
-                    <text x="18" y="14" fill="#FFFFFF" fontSize="10" fontWeight="bold" textAnchor="middle">404</text>
-                  </g>
-                </g>
-              </g>
-
-              {/* The Lost House Character */}
-              <g transform="translate(180, 110)" style={{ animation: 'float 3.5s ease-in-out infinite' }}>
-                {/* Yellow Hardhat */}
-                <path d="M 12 10 A 18 18 0 0 1 48 10 L 52 14 A 2 2 0 0 1 50 16 L 10 16 A 2 2 0 0 1 8 14 Z" fill="#F59E0B" />
-                <rect x="27" y="5" width="6" height="6" fill="#D97706" rx="1" />
-
-                {/* Main House Body */}
-                <path d="M 5 35 L 30 18 L 55 35 L 55 65 L 5 65 Z" fill="#F8FAFC" stroke="#0F172A" strokeWidth="3" />
-                {/* Roof Outline */}
-                <path d="M 2 34 L 30 15 L 58 34" stroke="#0F172A" strokeWidth="4.5" strokeLinecap="round" />
-                
-                {/* Dazed/Confused Eyes */}
-                <g stroke="#0F172A" strokeWidth="2.5" strokeLinecap="round">
-                  {/* Left X eye */}
-                  <line x1="16" y1="36" x2="24" y2="44" />
-                  <line x1="24" y1="36" x2="16" y2="44" />
-                  
-                  {/* Right X eye */}
-                  <line x1="36" y1="36" x2="44" y2="44" />
-                  <line x1="44" y1="36" x2="36" y2="44" />
-                </g>
-                
-                {/* Confused Mouth */}
-                <path d="M 25 54 Q 30 48 35 54" stroke="#0F172A" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-
-                {/* Sweating Droplet */}
-                <path d="M 52 38 Q 55 42 52 45 Q 49 42 52 38 Z" fill="#38BDF8" className="animate-pulse" />
-
-                {/* Cute Wobbling legs */}
-                <g className="origin-[30px_65px]">
-                  {/* Left Leg */}
-                  <path d="M 20 65 L 17 78 C 15 80, 10 78, 12 75" stroke="#0F172A" strokeWidth="3" strokeLinecap="round" fill="none" />
-                  {/* Right Leg */}
-                  <path d="M 40 65 L 43 78 C 45 80, 50 78, 48 75" stroke="#0F172A" strokeWidth="3" strokeLinecap="round" fill="none" />
-                </g>
-              </g>
-
-              {/* Magnifying Glass looking for page */}
-              <g transform="translate(180, 95)" style={{ animation: 'float 4.2s ease-in-out infinite', animationDelay: '0.8s' }}>
-                <circle cx="90" cy="90" r="22" stroke="#0284C7" strokeWidth="3.5" fill="rgba(2, 132, 199, 0.05)" />
-                <line x1="106" y1="106" x2="128" y2="128" stroke="#0F172A" strokeWidth="4.5" strokeLinecap="round" />
-                {/* Lens Highlight */}
-                <path d="M 76 82 A 16 16 0 0 1 96 74" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
-              </g>
-              
-              {/* Question Marks popping up */}
-              <text x="140" y="85" fill="#325FEC" fontSize="24" fontWeight="bold" className="animate-bounce" style={{ animationDuration: '2.5s' }}>?</text>
-              <text x="250" y="100" fill="#0284C7" fontSize="20" fontWeight="bold" className="animate-bounce" style={{ animationDuration: '3s', animationDelay: '0.4s' }}>?</text>
-            </svg>
-          </div>
-
-          {/* Error Details */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-primaryBg border border-brand-primaryBorder/20 text-[10px] sm:text-xs font-semibold tracking-widest text-brand-primary uppercase mb-4 font-sans">
-            ⚠️ Plot #404 Uncharted
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl font-black text-brand-navy tracking-tight mb-3 font-sans">
-            Looking for something?
+          {/* Large Clean 404 Text */}
+          <h1 className="text-7xl sm:text-8xl font-black text-brand-navy tracking-tighter mb-4 font-sans bg-clip-text text-transparent bg-gradient-to-b from-brand-navy to-brand-slate">
+            404
           </h1>
 
-          {/* Funny dynamically selected message */}
-          <p className="text-sm sm:text-base text-brand-slate font-light leading-relaxed mb-8 max-w-md mx-auto font-sans min-h-[48px] flex items-center justify-center">
-            {randomMessage || "The page you are looking for has been relocated or doesn't exist on our registry."}
+          <h2 className="text-xl sm:text-2xl font-bold text-brand-navy mb-4 font-sans tracking-tight">
+            Page Not Found
+          </h2>
+
+          <p className="text-sm sm:text-base text-brand-slate font-light leading-relaxed mb-8 max-w-md mx-auto font-sans">
+            The page you are looking for doesn't exist, has been moved, or has a temporary technical hold. Search our directory below to find what you need.
           </p>
 
           {/* Interactive Search Container */}
@@ -279,7 +158,7 @@ export default function NotFound() {
                 {filteredPages.length > 0 ? (
                   <div className="max-h-[280px] overflow-y-auto p-2">
                     <div className="px-3 py-1.5 text-[10px] font-semibold text-brand-slateLight tracking-wider uppercase border-b border-brand-border/40 mb-1">
-                      Matching Registered Pages ({filteredPages.length})
+                      Matching Pages ({filteredPages.length})
                     </div>
                     {filteredPages.map((page, index) => {
                       const IconComponent = page.icon;
@@ -317,7 +196,7 @@ export default function NotFound() {
                   </div>
                 ) : (
                   <div className="p-6 text-center text-brand-slate text-xs font-light">
-                    🔍 No land records found for "{searchQuery}". <br/>
+                    🔍 No pages found for "{searchQuery}". <br/>
                     Try searching <span className="font-semibold text-brand-primary cursor-pointer hover:underline" onClick={() => selectSuggested('projects')}>projects</span>,{' '}
                     <span className="font-semibold text-brand-primary cursor-pointer hover:underline" onClick={() => selectSuggested('careers')}>careers</span>, or{' '}
                     <span className="font-semibold text-brand-primary cursor-pointer hover:underline" onClick={() => selectSuggested('services')}>services</span>.
@@ -333,13 +212,13 @@ export default function NotFound() {
                 onClick={() => selectSuggested('projects')}
                 className="px-3 py-1 rounded-full text-[11px] bg-brand-bgAlt text-brand-slate hover:bg-brand-primaryBg hover:text-brand-primary border border-brand-border transition-all duration-200 cursor-pointer"
               >
-                Track Projects
+                Projects
               </button>
               <button 
                 onClick={() => selectSuggested('services')}
                 className="px-3 py-1 rounded-full text-[11px] bg-brand-bgAlt text-brand-slate hover:bg-brand-primaryBg hover:text-brand-primary border border-brand-border transition-all duration-200 cursor-pointer"
               >
-                Advisory Desk
+                Services
               </button>
               <button 
                 onClick={() => selectSuggested('team')}
