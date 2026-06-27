@@ -173,10 +173,10 @@ function PressReleasesClient() {
         </div>
 
         {/* Sleek Minimalist Filter Header */}
-        <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center border-b border-brand-borderMid/10 pb-0 mb-16 gap-6 z-20">
-          {/* Source Tabs (Left side) */}
+        <div className="w-full flex flex-col gap-6 mb-12 z-20">
+          {/* Source Tabs (Top side) with bottom border */}
           <div 
-            className="flex gap-6 sm:gap-8 items-center w-full md:w-auto overflow-x-auto whitespace-nowrap pb-0 [&::-webkit-scrollbar]:hidden"
+            className="flex gap-6 sm:gap-8 items-center w-full overflow-x-auto whitespace-nowrap pb-0 border-b border-brand-borderMid/10 [&::-webkit-scrollbar]:hidden"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {['ALL', 'articles', 'press_releases'].map(sourceCode => (
@@ -194,18 +194,18 @@ function PressReleasesClient() {
             ))}
           </div>
 
-          {/* Region & Type Filters (Right side) */}
-          <div className="flex flex-row items-center justify-between md:justify-end gap-3 sm:gap-4 w-full md:w-auto pb-3 md:pb-0">
+          {/* Region & Type Filters (Bottom side) */}
+          <div className="flex flex-row items-center justify-between md:justify-start gap-4 sm:gap-6 w-full pb-0">
             {/* Region Select */}
-            <div className="flex items-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial w-full sm:w-auto">
-              <label htmlFor="region-select" className="hidden sm:inline-block text-[10px] sm:text-xs uppercase font-extrabold tracking-widest text-brand-slateLight font-sans shrink-0">
+            <div className="flex items-center gap-2 flex-1 sm:flex-initial w-full sm:w-auto">
+              <label htmlFor="region-select" className="text-[10px] sm:text-xs uppercase font-extrabold tracking-widest text-brand-slateLight font-sans shrink-0">
                 Region:
               </label>
               <select
                 id="region-select"
                 value={selectedState}
                 onChange={(e) => setSelectedState(e.target.value)}
-                className="w-full sm:w-auto px-2 sm:px-3.5 py-1.5 pr-7 sm:pr-8 rounded-xl border border-brand-borderMid/20 bg-white text-[11px] sm:text-xs font-bold text-brand-slate hover:text-brand-navy transition-premium cursor-pointer outline-none focus:border-brand-primary font-sans shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:0.6rem_auto] bg-[right_0.6rem_center] bg-no-repeat focus:ring-2 focus:ring-brand-primaryBg"
+                className="w-full sm:w-auto px-2.5 sm:px-3.5 py-1.5 pr-7 sm:pr-8 rounded-xl border border-brand-borderMid/20 bg-white text-[11px] sm:text-xs font-bold text-brand-slate hover:text-brand-navy transition-premium cursor-pointer outline-none focus:border-brand-primary font-sans shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:0.6rem_auto] bg-[right_0.6rem_center] bg-no-repeat focus:ring-2 focus:ring-brand-primaryBg"
               >
                 <option value="ALL">All Regions</option>
                 <option value="DL">Delhi</option>
@@ -215,15 +215,15 @@ function PressReleasesClient() {
             </div>
 
             {/* Type Select */}
-            <div className="flex items-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial w-full sm:w-auto">
-              <label htmlFor="category-select" className="hidden sm:inline-block text-[10px] sm:text-xs uppercase font-extrabold tracking-widest text-brand-slateLight font-sans shrink-0">
+            <div className="flex items-center gap-2 flex-1 sm:flex-initial w-full sm:w-auto">
+              <label htmlFor="category-select" className="text-[10px] sm:text-xs uppercase font-extrabold tracking-widest text-brand-slateLight font-sans shrink-0">
                 Type:
               </label>
               <select
                 id="category-select"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full sm:w-auto px-2 sm:px-3.5 py-1.5 pr-7 sm:pr-8 rounded-xl border border-brand-borderMid/20 bg-white text-[11px] sm:text-xs font-bold text-brand-slate hover:text-brand-navy transition-premium cursor-pointer outline-none focus:border-brand-primary font-sans shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:0.6rem_auto] bg-[right_0.6rem_center] bg-no-repeat focus:ring-2 focus:ring-brand-primaryBg"
+                className="w-full sm:w-auto px-2.5 sm:px-3.5 py-1.5 pr-7 sm:pr-8 rounded-xl border border-brand-borderMid/20 bg-white text-[11px] sm:text-xs font-bold text-brand-slate hover:text-brand-navy transition-premium cursor-pointer outline-none focus:border-brand-primary font-sans shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:0.6rem_auto] bg-[right_0.6rem_center] bg-no-repeat focus:ring-2 focus:ring-brand-primaryBg"
               >
                 <option value="ALL">All Types</option>
                 <option value="RERA">RERA</option>
