@@ -105,6 +105,7 @@ export async function GET(request) {
             state: doc.state || 'General',
             city: doc.city || '',
             category: (doc.categories && doc.categories[0]) || 'News',
+            categories: doc.categories || [],
             builders: doc.builders || [],
             projects: doc.projects || [],
             authorities: doc.authorities || [],
@@ -150,6 +151,7 @@ export async function GET(request) {
                 state: stateCode,
                 city: doc.city || '',
                 category: (doc.categories && doc.categories[0]) || 'PR',
+                categories: doc.categories || [],
                 sourceName: mapSourceName(doc.source || colName)
               };
             });

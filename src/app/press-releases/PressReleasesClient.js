@@ -62,6 +62,11 @@ function PressReleasesClient() {
   const [selectedState, setSelectedState] = useState('ALL');
   const [selectedSource, setSelectedSource] = useState('ALL');
   const [visibleCount, setVisibleCount] = useState(10);
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
+
+  useEffect(() => {
+    setVisibleCount(10);
+  }, [selectedCategory]);
 
   useEffect(() => {
     async function fetchFeed() {
@@ -115,6 +120,28 @@ function PressReleasesClient() {
     }
   };
 
+  const filteredFeed = feed.filter(item => {
+    if (selectedCategory === 'ALL') return true;
+    const itemCats = (item.categories || []).map(c => c.toLowerCase());
+    
+    if (selectedCategory === 'RERA') {
+      return itemCats.includes('rera');
+    }
+    if (selectedCategory === 'TAX') {
+      return itemCats.includes('tax') || itemCats.includes('stamp duty') || itemCats.includes('registry');
+    }
+    if (selectedCategory === 'INFRA') {
+      return itemCats.includes('infrastructure') || 
+             itemCats.includes('infra') || 
+             itemCats.includes('expressway') || 
+             itemCats.includes('metro') || 
+             itemCats.includes('airport') || 
+             itemCats.includes('smart city') ||
+             itemCats.includes('government project');
+    }
+    return true;
+  });
+
   return (
     <section className="relative pt-28 pb-20 sm:pt-36 sm:pb-24 lg:pt-40 lg:pb-32 overflow-hidden bg-white border-b border-brand-borderMid/10 min-h-[700px] w-full flex flex-col items-center justify-center">
       {/* Soft decorative background glows */}
@@ -167,22 +194,43 @@ function PressReleasesClient() {
             ))}
           </div>
 
-          {/* Region Select (Right side) */}
-          <div className="flex items-center justify-between md:justify-end gap-2.5 w-full md:w-auto pb-3 md:pb-0">
-            <label htmlFor="region-select" className="text-[10px] sm:text-xs uppercase font-extrabold tracking-widest text-brand-slateLight font-sans shrink-0">
-              Filter Region:
-            </label>
-            <select
-              id="region-select"
-              value={selectedState}
-              onChange={(e) => setSelectedState(e.target.value)}
-              className="px-3.5 py-1.5 pr-8 rounded-xl border border-brand-borderMid/20 bg-white text-xs font-bold text-brand-slate hover:text-brand-navy transition-premium cursor-pointer outline-none focus:border-brand-primary font-sans shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:0.6rem_auto] bg-[right_0.75rem_center] bg-no-repeat focus:ring-2 focus:ring-brand-primaryBg"
-            >
-              <option value="ALL">All Regions</option>
-              <option value="DL">Delhi</option>
-              <option value="HR">Haryana</option>
-              <option value="UP">Uttar Pradesh</option>
-            </select>
+          {/* Region & Type Filters (Right side) */}
+          <div className="flex flex-wrap items-center justify-between md:justify-end gap-4 w-full md:w-auto pb-3 md:pb-0">
+            {/* Region Select */}
+            <div className="flex items-center gap-2">
+              <label htmlFor="region-select" className="text-[10px] sm:text-xs uppercase font-extrabold tracking-widest text-brand-slateLight font-sans shrink-0">
+                Region:
+              </label>
+              <select
+                id="region-select"
+                value={selectedState}
+                onChange={(e) => setSelectedState(e.target.value)}
+                className="px-3.5 py-1.5 pr-8 rounded-xl border border-brand-borderMid/20 bg-white text-xs font-bold text-brand-slate hover:text-brand-navy transition-premium cursor-pointer outline-none focus:border-brand-primary font-sans shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:0.6rem_auto] bg-[right_0.75rem_center] bg-no-repeat focus:ring-2 focus:ring-brand-primaryBg"
+              >
+                <option value="ALL">All Regions</option>
+                <option value="DL">Delhi</option>
+                <option value="HR">Haryana</option>
+                <option value="UP">Uttar Pradesh</option>
+              </select>
+            </div>
+
+            {/* Type Select */}
+            <div className="flex items-center gap-2">
+              <label htmlFor="category-select" className="text-[10px] sm:text-xs uppercase font-extrabold tracking-widest text-brand-slateLight font-sans shrink-0">
+                Type:
+              </label>
+              <select
+                id="category-select"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="px-3.5 py-1.5 pr-8 rounded-xl border border-brand-borderMid/20 bg-white text-xs font-bold text-brand-slate hover:text-brand-navy transition-premium cursor-pointer outline-none focus:border-brand-primary font-sans shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:0.6rem_auto] bg-[right_0.75rem_center] bg-no-repeat focus:ring-2 focus:ring-brand-primaryBg"
+              >
+                <option value="ALL">All Types</option>
+                <option value="RERA">RERA</option>
+                <option value="TAX">Tax & Stamp Duty</option>
+                <option value="INFRA">Infrastructure / Infra</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -216,15 +264,15 @@ function PressReleasesClient() {
                 Retry Sync
               </button>
             </div>
-          ) : feed.length === 0 ? (
+          ) : filteredFeed.length === 0 ? (
             /* Premium Empty State */
             <div className="bg-brand-bgAlt border border-brand-border/60 rounded-3xl p-12 text-center w-full">
               <p className="text-brand-slate font-sans mb-2 font-bold text-sm">No updates found.</p>
-              <p className="text-xs text-brand-slateLight font-sans font-normal">Check back later for recent regional press releases.</p>
+              <p className="text-xs text-brand-slateLight font-sans font-normal">Try selecting another category or region.</p>
             </div>
           ) : (
             /* Chronological Feed Stream */
-            feed.slice(0, visibleCount).map((item) => {
+            filteredFeed.slice(0, visibleCount).map((item) => {
               const visuals = getSourceVisuals(item.sourceName);
               return (
                 <article 
@@ -311,7 +359,7 @@ function PressReleasesClient() {
           )}
           
           {/* Load More Button */}
-          {!loading && !error && feed.length > visibleCount && (
+          {!loading && !error && filteredFeed.length > visibleCount && (
             <div className="flex justify-center pt-8">
               <button
                 onClick={() => setVisibleCount(prev => prev + 10)}
