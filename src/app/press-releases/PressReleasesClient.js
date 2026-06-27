@@ -195,7 +195,7 @@ function PressReleasesClient() {
           </div>
 
           {/* Region & Type Filters (Bottom side) */}
-          <div className="flex flex-row items-center justify-between md:justify-start gap-4 sm:gap-6 w-full pb-0">
+          <div className="flex flex-row items-center justify-between md:justify-end gap-4 sm:gap-6 w-full pb-0">
             {/* Region Select */}
             <div className="flex items-center gap-2 flex-1 sm:flex-initial w-full sm:w-auto">
               <label htmlFor="region-select" className="text-[10px] sm:text-xs uppercase font-extrabold tracking-widest text-brand-slateLight font-sans shrink-0">
