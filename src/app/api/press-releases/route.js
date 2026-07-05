@@ -66,6 +66,71 @@ function cleanContent(text) {
   return cleaned;
 }
 
+function mapToPrimaryCategory(categories = [], rawCategory = '') {
+  const allCats = [...categories];
+  if (rawCategory) allCats.push(rawCategory);
+
+  const realEstateKeywords = [
+    'residential', 'commercial', 'affordable housing', 'projects', 'builders',
+    'investment', 'property launch', 'rera approvals', 'sales', 'rera', 'tax', 
+    'stamp duty', 'registry', 'construction', 'builder', 'real estate', 'court'
+  ];
+  
+  const infraKeywords = [
+    'metro', 'expressway', 'airport', 'railway', 'road', 'highway', 'government',
+    'smart city', 'utilities', 'charging stations', 'data centres', 'infrastructure', 
+    'infra', 'government project'
+  ];
+
+  for (const cat of allCats) {
+    if (!cat) continue;
+    const lowerCat = cat.toLowerCase().trim();
+    if (realEstateKeywords.some(kw => lowerCat.includes(kw))) {
+      return 'Real Estate';
+    }
+    if (infraKeywords.some(kw => lowerCat.includes(kw))) {
+      return 'Infrastructure';
+    }
+  }
+
+  // Fallback check on primary category if list doesn't match
+  if (rawCategory) {
+    const lowerRaw = rawCategory.toLowerCase().trim();
+    if (realEstateKeywords.some(kw => lowerRaw.includes(kw))) {
+      return 'Real Estate';
+    }
+    if (infraKeywords.some(kw => lowerRaw.includes(kw))) {
+      return 'Infrastructure';
+    }
+  }
+
+  return 'Real Estate'; // default fallback
+}
+
+function getDisplayTags(doc) {
+  if (!doc) return [];
+  const rawTags = doc.tags || [];
+  const rawBuilders = doc.builders || [];
+  const rawProjects = doc.projects || [];
+  const rawAuthorities = doc.authorities || [];
+
+  const allTags = [...rawTags, ...rawBuilders, ...rawProjects, ...rawAuthorities];
+
+  const uniqueTags = [];
+  const seen = new Set();
+
+  for (const tag of allTags) {
+    if (tag && typeof tag === 'string') {
+      const trimmed = tag.trim();
+      if (trimmed && !seen.has(trimmed.toLowerCase())) {
+        seen.add(trimmed.toLowerCase());
+        uniqueTags.push(trimmed);
+      }
+    }
+  }
+  return uniqueTags;
+}
+
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -116,11 +181,12 @@ export async function GET(request) {
             date: doc.published_at ? new Date(doc.published_at).toISOString() : new Date().toISOString(),
             state: doc.state || 'General',
             city: doc.city || '',
-            category: (doc.categories && doc.categories[0]) || 'News',
+            category: mapToPrimaryCategory(doc.categories || [], doc.category || doc.primary_category || ''),
             categories: doc.categories || [],
             builders: doc.builders || [],
             projects: doc.projects || [],
             authorities: doc.authorities || [],
+            displayTags: getDisplayTags(doc),
             sourceName: mapSourceName(doc.source || 'mint')
           }));
         }
@@ -168,14 +234,18 @@ export async function GET(request) {
               return {
                 id: doc._id.toString(),
                 source: 'press_releases',
-                title: doc.title || 'Official Press Release',
+                title: doc.title || 'Official News Update',
                 content: cleanContent(doc.content || doc.description || 'Official announcement and details regarding regional real estate guidelines.'),
                 url: doc.url || '#',
                 date: doc.published_at ? new Date(doc.published_at).toISOString() : new Date().toISOString(),
                 state: stateCode,
                 city: doc.city || '',
-                category: (doc.categories && doc.categories[0]) || 'PR',
+                category: mapToPrimaryCategory(doc.categories || [], doc.category || doc.primary_category || ''),
                 categories: doc.categories || [],
+                builders: doc.builders || [],
+                projects: doc.projects || [],
+                authorities: doc.authorities || [],
+                displayTags: getDisplayTags(doc),
                 sourceName: mapSourceName(doc.source || colName)
               };
             });

@@ -55,29 +55,7 @@ const getSourceVisuals = (sourceName) => {
   };
 };
 
-const getMergedTags = (item) => {
-  if (!item) return [];
-  const rawTags = item.tags || [];
-  const rawBuilders = item.builders || [];
-  const rawProjects = item.projects || [];
-  const rawAuthorities = item.authorities || [];
 
-  const allTags = [...rawTags, ...rawBuilders, ...rawProjects, ...rawAuthorities];
-
-  const uniqueTags = [];
-  const seen = new Set();
-
-  for (const tag of allTags) {
-    if (tag && typeof tag === 'string') {
-      const trimmed = tag.trim();
-      if (trimmed && !seen.has(trimmed.toLowerCase())) {
-        seen.add(trimmed.toLowerCase());
-        uniqueTags.push(trimmed);
-      }
-    }
-  }
-  return uniqueTags;
-};
 
 const getTagStyle = (tag, item) => {
   if (!tag || !item) return { icon: null, className: "" };
@@ -211,27 +189,14 @@ function PressReleasesClient() {
   const filteredFeed = feed.filter(item => {
     // 1. Category check
     if (selectedCategory !== 'ALL') {
-      const itemCats = (item.categories || []).map(c => c.toLowerCase());
-      let matchesCategory = false;
-      if (selectedCategory === 'RERA') {
-        matchesCategory = itemCats.includes('rera');
-      } else if (selectedCategory === 'TAX') {
-        matchesCategory = itemCats.includes('tax') || itemCats.includes('stamp duty') || itemCats.includes('registry');
-      } else if (selectedCategory === 'INFRA') {
-        matchesCategory = itemCats.includes('infrastructure') || 
-                          itemCats.includes('infra') || 
-                          itemCats.includes('expressway') || 
-                          itemCats.includes('metro') || 
-                          itemCats.includes('airport') || 
-                          itemCats.includes('smart city') ||
-                          itemCats.includes('government project');
+      if (item.category !== selectedCategory) {
+        return false;
       }
-      if (!matchesCategory) return false;
     }
 
     // 2. Tag check (AND condition)
     if (selectedTag) {
-      const itemTags = getMergedTags(item).map(t => t.toLowerCase());
+      const itemTags = (item.displayTags || []).map(t => t.toLowerCase());
       if (!itemTags.includes(selectedTag.toLowerCase())) {
         return false;
       }
@@ -287,7 +252,7 @@ function PressReleasesClient() {
                     : 'text-brand-slateLight border-transparent hover:text-brand-navy'
                 }`}
               >
-                {sourceCode === 'ALL' ? 'All Updates' : sourceCode === 'articles' ? 'Property News' : 'Press Releases'}
+                {sourceCode === 'ALL' ? 'All News' : sourceCode === 'articles' ? 'Property News' : 'Latest News'}
               </button>
             ))}
           </div>
@@ -312,10 +277,10 @@ function PressReleasesClient() {
               </select>
             </div>
 
-            {/* Type Select */}
+            {/* Category Select */}
             <div className="flex items-center gap-2 flex-1 sm:flex-initial w-full sm:w-auto">
               <label htmlFor="category-select" className="text-[10px] sm:text-xs uppercase font-extrabold tracking-widest text-brand-slateLight font-sans shrink-0">
-                Type:
+                Category:
               </label>
               <select
                 id="category-select"
@@ -323,10 +288,9 @@ function PressReleasesClient() {
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="w-full sm:w-auto px-2.5 sm:px-3.5 py-1.5 pr-7 sm:pr-8 rounded-xl border border-brand-borderMid/20 bg-white text-[11px] sm:text-xs font-bold text-brand-slate hover:text-brand-navy transition-premium cursor-pointer outline-none focus:border-brand-primary font-sans shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:0.6rem_auto] bg-[right_0.6rem_center] bg-no-repeat focus:ring-2 focus:ring-brand-primaryBg"
               >
-                <option value="ALL">All Types</option>
-                <option value="RERA">RERA</option>
-                <option value="TAX">Tax & Stamp Duty</option>
-                <option value="INFRA">Infrastructure / Infra</option>
+                <option value="ALL">All Categories</option>
+                <option value="Real Estate">Real Estate</option>
+                <option value="Infrastructure">Infrastructure</option>
               </select>
             </div>
           </div>
@@ -422,7 +386,7 @@ function PressReleasesClient() {
 
                   {/* Clean Metadata Tags */}
                   {(() => {
-                    const mergedTags = getMergedTags(item);
+                    const mergedTags = item.displayTags || [];
                     if (mergedTags.length === 0) return null;
                     return (
                       <div className="flex flex-wrap gap-1.5 pt-1">
@@ -458,7 +422,7 @@ function PressReleasesClient() {
                   {/* Footer Details & Action Link */}
                   <div className="flex justify-between items-center text-xs font-sans">
                     <span className="text-[10px] sm:text-xs font-semibold text-brand-slateLight uppercase tracking-wider font-sans">
-                      Source: {item.sourceName || (item.source === 'articles' ? 'Media Article' : 'Official Press Release')}
+                      Source: {item.sourceName || (item.source === 'articles' ? 'Media Article' : 'Official Update')}
                     </span>
                     <a 
                       href={item.url} 
@@ -466,7 +430,7 @@ function PressReleasesClient() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-xs font-bold text-brand-primary uppercase tracking-widest font-sans cursor-pointer group-hover:text-brand-primaryDark transition-colors"
                     >
-                      Read Full Release
+                      Read Full Story
                       <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform duration-300" />
                     </a>
                   </div>
