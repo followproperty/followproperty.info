@@ -71,6 +71,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const stateParam = (searchParams.get('state') || 'ALL').toUpperCase();
     const sourceParam = (searchParams.get('source') || 'ALL').toLowerCase(); // 'all', 'articles', 'press_releases'
+    const tagParam = searchParams.get('tag');
 
     const client = await clientPromise;
     
@@ -85,6 +86,17 @@ export async function GET(request) {
         const query = {};
         if (stateParam !== 'ALL') {
           query.state = new RegExp(`^${stateParam}`, 'i');
+        }
+        
+        if (tagParam) {
+          const escapedTag = tagParam.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const tagRegex = new RegExp(`^${escapedTag}$`, 'i');
+          query.$or = [
+            { tags: tagRegex },
+            { builders: tagRegex },
+            { projects: tagRegex },
+            { authorities: tagRegex }
+          ];
         }
         
         const articles = await db.collection('articles')
@@ -126,8 +138,20 @@ export async function GET(request) {
           : [STATE_MAP[stateParam]?.collection].filter(Boolean);
 
         for (const colName of collectionsToQuery) {
+          const query = {};
+          if (tagParam) {
+            const escapedTag = tagParam.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const tagRegex = new RegExp(`^${escapedTag}$`, 'i');
+            query.$or = [
+              { tags: tagRegex },
+              { builders: tagRegex },
+              { projects: tagRegex },
+              { authorities: tagRegex }
+            ];
+          }
+
           const prs = await db.collection(colName)
-            .find({})
+            .find(query)
             .sort({ published_at: -1 })
             .limit(20)
             .toArray();

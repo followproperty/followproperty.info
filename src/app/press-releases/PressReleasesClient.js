@@ -55,6 +55,65 @@ const getSourceVisuals = (sourceName) => {
   };
 };
 
+const getMergedTags = (item) => {
+  if (!item) return [];
+  const rawTags = item.tags || [];
+  const rawBuilders = item.builders || [];
+  const rawProjects = item.projects || [];
+  const rawAuthorities = item.authorities || [];
+
+  const allTags = [...rawTags, ...rawBuilders, ...rawProjects, ...rawAuthorities];
+
+  const uniqueTags = [];
+  const seen = new Set();
+
+  for (const tag of allTags) {
+    if (tag && typeof tag === 'string') {
+      const trimmed = tag.trim();
+      if (trimmed && !seen.has(trimmed.toLowerCase())) {
+        seen.add(trimmed.toLowerCase());
+        uniqueTags.push(trimmed);
+      }
+    }
+  }
+  return uniqueTags;
+};
+
+const getTagStyle = (tag, item) => {
+  if (!tag || !item) return { icon: null, className: "" };
+  const lowerTag = tag.toLowerCase();
+  
+  // Check if it belongs to builders
+  if ((item.builders || []).some(b => b.toLowerCase() === lowerTag)) {
+    return {
+      icon: <Building2 className="w-2.5 h-2.5 text-brand-slateLight shrink-0" />,
+      className: "bg-brand-bgAlt border border-brand-border/40 text-[9px] font-bold text-brand-slate uppercase font-sans hover:bg-brand-primaryBg/50 hover:text-brand-primary transition-all duration-300"
+    };
+  }
+  
+  // Check if it belongs to projects
+  if ((item.projects || []).some(p => p.toLowerCase() === lowerTag)) {
+    return {
+      icon: <Globe className="w-2.5 h-2.5 text-brand-primaryLight shrink-0" />,
+      className: "bg-brand-primaryBg border border-brand-primaryBorder/30 text-[9px] font-bold text-brand-primary uppercase font-sans hover:bg-brand-primaryBg/80 transition-all duration-300"
+    };
+  }
+  
+  // Check if it belongs to authorities
+  if ((item.authorities || []).some(a => a.toLowerCase() === lowerTag)) {
+    return {
+      icon: <ShieldCheck className="w-2.5 h-2.5 text-brand-teal shrink-0" />,
+      className: "bg-brand-tealBg border border-brand-tealBorder/40 text-[9px] font-bold text-brand-teal uppercase font-sans hover:bg-brand-tealBg/80 transition-all duration-300"
+    };
+  }
+  
+  // Default general tag styling
+  return {
+    icon: <Tag className="w-2.5 h-2.5 text-brand-slateLight shrink-0" />,
+    className: "bg-brand-bgAlt/50 border border-brand-border/30 text-[9px] font-semibold text-brand-slate uppercase font-sans hover:bg-brand-primaryBg/50 hover:text-brand-primary transition-all duration-300"
+  };
+};
+
 function PressReleasesClient() {
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -63,10 +122,36 @@ function PressReleasesClient() {
   const [selectedSource, setSelectedSource] = useState('ALL');
   const [visibleCount, setVisibleCount] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const [selectedTag, setSelectedTag] = useState(null);
 
+  // Sync state with URL tag search query parameter on initial mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tagParam = params.get('tag');
+      if (tagParam) {
+        setSelectedTag(tagParam);
+      }
+    }
+  }, []);
+
+  // Update URL search query parameter when selectedTag changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      if (selectedTag) {
+        url.searchParams.set('tag', selectedTag);
+      } else {
+        url.searchParams.delete('tag');
+      }
+      window.history.pushState(null, '', url.toString());
+    }
+  }, [selectedTag]);
+
+  // Reset visibleCount on any filter change
   useEffect(() => {
     setVisibleCount(10);
-  }, [selectedCategory]);
+  }, [selectedCategory, selectedState, selectedSource, selectedTag]);
 
   useEffect(() => {
     async function fetchFeed() {
@@ -77,6 +162,9 @@ function PressReleasesClient() {
           state: selectedState,
           source: selectedSource === 'ALL' ? 'all' : selectedSource
         });
+        if (selectedTag) {
+          queryParams.set('tag', selectedTag);
+        }
         
         const res = await fetch(`/api/press-releases?${queryParams.toString()}`);
         if (!res.ok) {
@@ -98,7 +186,7 @@ function PressReleasesClient() {
     }
 
     fetchFeed();
-  }, [selectedState, selectedSource]);
+  }, [selectedState, selectedSource, selectedTag]);
 
   // Helper to format date strings
   const formatDate = (dateStr) => {
@@ -121,24 +209,34 @@ function PressReleasesClient() {
   };
 
   const filteredFeed = feed.filter(item => {
-    if (selectedCategory === 'ALL') return true;
-    const itemCats = (item.categories || []).map(c => c.toLowerCase());
-    
-    if (selectedCategory === 'RERA') {
-      return itemCats.includes('rera');
+    // 1. Category check
+    if (selectedCategory !== 'ALL') {
+      const itemCats = (item.categories || []).map(c => c.toLowerCase());
+      let matchesCategory = false;
+      if (selectedCategory === 'RERA') {
+        matchesCategory = itemCats.includes('rera');
+      } else if (selectedCategory === 'TAX') {
+        matchesCategory = itemCats.includes('tax') || itemCats.includes('stamp duty') || itemCats.includes('registry');
+      } else if (selectedCategory === 'INFRA') {
+        matchesCategory = itemCats.includes('infrastructure') || 
+                          itemCats.includes('infra') || 
+                          itemCats.includes('expressway') || 
+                          itemCats.includes('metro') || 
+                          itemCats.includes('airport') || 
+                          itemCats.includes('smart city') ||
+                          itemCats.includes('government project');
+      }
+      if (!matchesCategory) return false;
     }
-    if (selectedCategory === 'TAX') {
-      return itemCats.includes('tax') || itemCats.includes('stamp duty') || itemCats.includes('registry');
+
+    // 2. Tag check (AND condition)
+    if (selectedTag) {
+      const itemTags = getMergedTags(item).map(t => t.toLowerCase());
+      if (!itemTags.includes(selectedTag.toLowerCase())) {
+        return false;
+      }
     }
-    if (selectedCategory === 'INFRA') {
-      return itemCats.includes('infrastructure') || 
-             itemCats.includes('infra') || 
-             itemCats.includes('expressway') || 
-             itemCats.includes('metro') || 
-             itemCats.includes('airport') || 
-             itemCats.includes('smart city') ||
-             itemCats.includes('government project');
-    }
+
     return true;
   });
 
@@ -157,18 +255,18 @@ function PressReleasesClient() {
           {/* Brand Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-primaryBg border border-brand-primaryBorder/10 mb-6 transition-premium mx-auto">
             <span className="text-[10px] sm:text-xs font-bold tracking-wider text-brand-primary uppercase font-sans">
-              PRESS ROOM
+              NEWS AGGREGATION
             </span>
           </div>
 
           {/* Heading */}
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-brand-navy leading-[1.15] mb-6 font-sans max-w-3xl mx-auto">
-            Latest updates and news.
+            News Aggregation
           </h1>
 
           {/* Subtitle */}
           <p className="max-w-2xl mx-auto text-sm sm:text-base lg:text-lg text-brand-slate font-normal leading-relaxed text-center font-sans">
-            Stay informed on our tech launches, partnerships, and research insights.
+            Stay informed on the latest real estate news, notifications, and market updates.
           </p>
         </div>
 
@@ -195,7 +293,7 @@ function PressReleasesClient() {
           </div>
 
           {/* Region & Type Filters (Bottom side) */}
-          <div className="flex flex-row items-center justify-between md:justify-end gap-4 sm:gap-6 w-full pb-0">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between md:justify-end gap-4 sm:gap-6 w-full pb-0">
             {/* Region Select */}
             <div className="flex items-center gap-2 flex-1 sm:flex-initial w-full sm:w-auto">
               <label htmlFor="region-select" className="text-[10px] sm:text-xs uppercase font-extrabold tracking-widest text-brand-slateLight font-sans shrink-0">
@@ -236,6 +334,22 @@ function PressReleasesClient() {
 
         {/* Chronological News Feed List */}
         <div className="w-full flex flex-col gap-6 max-w-2xl min-h-[300px]">
+          {/* Active Tag Indicator Banner */}
+          {selectedTag && (
+            <div className="flex items-center justify-between px-5 py-3 bg-brand-primaryBg border border-brand-primaryBorder/30 rounded-2xl shadow-brand text-xs font-sans animate-fadeIn">
+              <span className="text-brand-slate font-medium">
+                Showing articles tagged with: <strong className="text-brand-primary">{selectedTag}</strong>
+              </span>
+              <button
+                onClick={() => setSelectedTag(null)}
+                className="flex items-center justify-center w-5 h-5 rounded-full bg-brand-borderMid/10 hover:bg-brand-red/10 text-brand-slate hover:text-brand-red font-bold font-sans cursor-pointer transition-colors"
+                title="Clear tag filter"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
           {loading ? (
             /* Minimal Skeleton Loaders */
             <div className="w-full flex flex-col gap-6">
@@ -307,28 +421,31 @@ function PressReleasesClient() {
                   </div>
 
                   {/* Clean Metadata Tags */}
-                  {item.source === 'articles' && (item.builders?.length > 0 || item.projects?.length > 0 || item.authorities?.length > 0) && (
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {item.builders?.map((b, idx) => (
-                        <span key={idx} className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-brand-bgAlt border border-brand-border/40 text-[9px] font-bold text-brand-slate uppercase font-sans">
-                          <Building2 className="w-2.5 h-2.5 text-brand-slateLight shrink-0" />
-                          {b}
-                        </span>
-                      ))}
-                      {item.projects?.map((p, idx) => (
-                        <span key={idx} className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-brand-primaryBg border border-brand-primaryBorder/30 text-[9px] font-bold text-brand-primary uppercase font-sans">
-                          <Globe className="w-2.5 h-2.5 text-brand-primaryLight shrink-0" />
-                          {p}
-                        </span>
-                      ))}
-                      {item.authorities?.map((a, idx) => (
-                        <span key={idx} className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-brand-tealBg border border-brand-tealBorder/40 text-[9px] font-bold text-brand-teal uppercase font-sans">
-                          <ShieldCheck className="w-2.5 h-2.5 text-brand-teal shrink-0" />
-                          {a}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  {(() => {
+                    const mergedTags = getMergedTags(item);
+                    if (mergedTags.length === 0) return null;
+                    return (
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {mergedTags.map((tag, idx) => {
+                          const style = getTagStyle(tag, item);
+                          return (
+                            <button
+                              key={idx}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setSelectedTag(tag);
+                              }}
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded cursor-pointer ${style.className}`}
+                            >
+                              {style.icon}
+                              {tag}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
 
                   {/* Description with Line Clamp */}
                   <p className="text-xs sm:text-sm text-brand-slate font-normal leading-relaxed font-sans line-clamp-3 overflow-hidden text-ellipsis">
