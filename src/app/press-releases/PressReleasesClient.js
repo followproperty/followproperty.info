@@ -57,40 +57,7 @@ const getSourceVisuals = (sourceName) => {
 
 
 
-const getTagStyle = (tag, item) => {
-  if (!tag || !item) return { icon: null, className: "" };
-  const lowerTag = tag.toLowerCase();
-  
-  // Check if it belongs to builders
-  if ((item.builders || []).some(b => b.toLowerCase() === lowerTag)) {
-    return {
-      icon: <Building2 className="w-2.5 h-2.5 text-brand-slateLight shrink-0" />,
-      className: "bg-brand-bgAlt border border-brand-border/40 text-[9px] font-bold text-brand-slate uppercase font-sans hover:bg-brand-primaryBg/50 hover:text-brand-primary transition-all duration-300"
-    };
-  }
-  
-  // Check if it belongs to projects
-  if ((item.projects || []).some(p => p.toLowerCase() === lowerTag)) {
-    return {
-      icon: <Globe className="w-2.5 h-2.5 text-brand-primaryLight shrink-0" />,
-      className: "bg-brand-primaryBg border border-brand-primaryBorder/30 text-[9px] font-bold text-brand-primary uppercase font-sans hover:bg-brand-primaryBg/80 transition-all duration-300"
-    };
-  }
-  
-  // Check if it belongs to authorities
-  if ((item.authorities || []).some(a => a.toLowerCase() === lowerTag)) {
-    return {
-      icon: <ShieldCheck className="w-2.5 h-2.5 text-brand-teal shrink-0" />,
-      className: "bg-brand-tealBg border border-brand-tealBorder/40 text-[9px] font-bold text-brand-teal uppercase font-sans hover:bg-brand-tealBg/80 transition-all duration-300"
-    };
-  }
-  
-  // Default general tag styling
-  return {
-    icon: <Tag className="w-2.5 h-2.5 text-brand-slateLight shrink-0" />,
-    className: "bg-brand-bgAlt/50 border border-brand-border/30 text-[9px] font-semibold text-brand-slate uppercase font-sans hover:bg-brand-primaryBg/50 hover:text-brand-primary transition-all duration-300"
-  };
-};
+
 
 function PressReleasesClient() {
   const [feed, setFeed] = useState([]);
@@ -176,14 +143,23 @@ function PressReleasesClient() {
     }
   };
 
-  // Helper for state tags mapping
-  const getStateName = (code) => {
-    switch (code?.toUpperCase()) {
-      case 'DL': return 'Delhi';
-      case 'HR': return 'Haryana';
-      case 'UP': return 'Uttar Pradesh';
-      default: return code || 'NCR';
+  // Helper to format location as City, State Code
+  const formatLocation = (city, state) => {
+    const parts = [];
+    if (city && city.trim()) parts.push(city.trim());
+    if (state && state !== 'General' && state.trim()) {
+      const code = state.trim().toUpperCase();
+      const codeMap = {
+        'DELHI': 'DL',
+        'DL': 'DL',
+        'HARYANA': 'HR',
+        'HR': 'HR',
+        'UTTAR PRADESH': 'UP',
+        'UP': 'UP'
+      };
+      parts.push(codeMap[code] || state.trim());
     }
+    return parts.join(', ');
   };
 
   const filteredFeed = feed.filter(item => {
@@ -252,7 +228,7 @@ function PressReleasesClient() {
                     : 'text-brand-slateLight border-transparent hover:text-brand-navy'
                 }`}
               >
-                {sourceCode === 'ALL' ? 'All News' : sourceCode === 'articles' ? 'Property News' : 'Latest News'}
+                {sourceCode === 'ALL' ? 'All News' : sourceCode === 'articles' ? 'Property News' : 'Official Updates'}
               </button>
             ))}
           </div>
@@ -302,7 +278,7 @@ function PressReleasesClient() {
           {selectedTag && (
             <div className="flex items-center justify-between px-5 py-3 bg-brand-primaryBg border border-brand-primaryBorder/30 rounded-2xl shadow-brand text-xs font-sans animate-fadeIn">
               <span className="text-brand-slate font-medium">
-                Showing articles tagged with: <strong className="text-brand-primary">{selectedTag}</strong>
+                Showing: <strong className="text-brand-primary">{selectedTag}</strong>
               </span>
               <button
                 onClick={() => setSelectedTag(null)}
@@ -364,12 +340,16 @@ function PressReleasesClient() {
                         <span>{formatDate(item.date)}</span>
                         <span className="text-brand-borderMid">•</span>
                         <span className="text-brand-primary font-bold">{item.category}</span>
-                        {item.state && item.state !== 'General' && (
-                          <>
-                            <span className="text-brand-borderMid">•</span>
-                            <span className="text-brand-slate">{getStateName(item.state)}</span>
-                          </>
-                        )}
+                        {(() => {
+                          const loc = formatLocation(item.city, item.state);
+                          if (!loc) return null;
+                          return (
+                            <>
+                              <span className="text-brand-borderMid">•</span>
+                              <span className="text-brand-slate">{loc}</span>
+                            </>
+                          );
+                        })()}
                       </div>
 
                       {/* Title */}
@@ -390,23 +370,19 @@ function PressReleasesClient() {
                     if (mergedTags.length === 0) return null;
                     return (
                       <div className="flex flex-wrap gap-1.5 pt-1">
-                        {mergedTags.map((tag, idx) => {
-                          const style = getTagStyle(tag, item);
-                          return (
-                            <button
-                              key={idx}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setSelectedTag(tag);
-                              }}
-                              className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded cursor-pointer ${style.className}`}
-                            >
-                              {style.icon}
-                              {tag}
-                            </button>
-                          );
-                        })}
+                        {mergedTags.map((tag, idx) => (
+                          <button
+                            key={idx}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setSelectedTag(tag);
+                            }}
+                            className="inline-flex items-center px-2.5 py-0.5 rounded bg-brand-bgAlt border border-brand-border/40 text-[9px] font-semibold text-brand-slate uppercase font-sans hover:bg-brand-primaryBg/50 hover:text-brand-primary transition-all duration-300 cursor-pointer shrink-0"
+                          >
+                            {tag}
+                          </button>
+                        ))}
                       </div>
                     );
                   })()}

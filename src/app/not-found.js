@@ -30,7 +30,7 @@ const PAGES = [
   { url: '/business', title: 'B2B Business Solutions', description: 'Solutions for developers and land owners.', category: 'Business', icon: Briefcase },
   { url: '/contact', title: 'Contact Advisory Desk', description: 'Get in touch with our advisory desk.', category: 'Support', icon: Phone },
   { url: '/faq', title: 'FAQs & Support', description: 'Frequently asked questions and client help.', category: 'Support', icon: HelpCircle },
-  { url: '/press-releases', title: 'Press Releases & Research', description: 'Follow our research channels and news.', category: 'Research', icon: Newspaper },
+  { url: '/press-releases', title: 'News Aggregation', description: 'Follow our property news aggregation and research.', category: 'Research', icon: Newspaper },
   { url: '/careers', title: 'Careers', description: 'Join our analyst, engineering, or product teams.', category: 'Company', icon: Users },
   { url: '/team', title: 'Our Team', description: 'Meet the founders and team of researchers.', category: 'Company', icon: Users },
   { url: '/locate-us', title: 'Locate Us', description: 'Office address and location details.', category: 'Company', icon: MapPin },

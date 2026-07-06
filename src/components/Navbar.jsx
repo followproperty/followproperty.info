@@ -31,7 +31,7 @@ export default function Navbar({ data, ctaText, onOpenLeadForm }) {
     if (normalized === 'products') return '/products';
     if (normalized === 'team' || normalized === 'our team') return '/team';
     if (normalized === 'faq' || normalized === 'faqs') return '/faq';
-    if (normalized === 'press release' || normalized === 'press releases' || normalized === 'press') return '/press-releases';
+    if (normalized === 'press release' || normalized === 'press releases' || normalized === 'press' || normalized === 'news' || normalized === 'news aggregation') return '/press-releases';
     if (normalized === 'careers') return '/careers';
     if (normalized === 'business owner' || normalized === 'are you a business owner?' || normalized === 'business') return '/business';
     if (normalized === 'locate us') return '/locate-us';
@@ -43,7 +43,7 @@ export default function Navbar({ data, ctaText, onOpenLeadForm }) {
   const dropdownLinks = [
       "Our Team",
       "FAQ",
-      "Press Release",
+      "News Aggregation",
       "Careers",
       "Business Owner"
     ];

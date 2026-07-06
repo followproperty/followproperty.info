@@ -109,26 +109,44 @@ function mapToPrimaryCategory(categories = [], rawCategory = '') {
 
 function getDisplayTags(doc) {
   if (!doc) return [];
-  const rawTags = doc.tags || [];
-  const rawBuilders = doc.builders || [];
-  const rawProjects = doc.projects || [];
-  const rawAuthorities = doc.authorities || [];
+  
+  const builders = doc.builders || [];
+  const projects = doc.projects || [];
+  const authorities = doc.authorities || [];
+  const localities = doc.entities?.localities || [];
+  const cities = doc.entities?.cities || (doc.city ? [doc.city] : []);
+  const tags = doc.tags || [];
+  const infra = doc.entities?.infrastructure || [];
+  const policies = doc.entities?.policies || [];
 
-  const allTags = [...rawTags, ...rawBuilders, ...rawProjects, ...rawAuthorities];
+  const rawSources = [
+    builders,
+    projects,
+    authorities,
+    localities,
+    cities,
+    tags,
+    infra,
+    policies
+  ];
 
   const uniqueTags = [];
   const seen = new Set();
 
-  for (const tag of allTags) {
-    if (tag && typeof tag === 'string') {
-      const trimmed = tag.trim();
-      if (trimmed && !seen.has(trimmed.toLowerCase())) {
-        seen.add(trimmed.toLowerCase());
-        uniqueTags.push(trimmed);
+  for (const list of rawSources) {
+    const arr = Array.isArray(list) ? list : (list ? [list] : []);
+    for (const tag of arr) {
+      if (tag && typeof tag === 'string') {
+        const trimmed = tag.trim();
+        if (trimmed && !seen.has(trimmed.toLowerCase())) {
+          seen.add(trimmed.toLowerCase());
+          uniqueTags.push(trimmed);
+        }
       }
     }
   }
-  return uniqueTags;
+
+  return uniqueTags.slice(0, 5);
 }
 
 export async function GET(request) {
@@ -160,7 +178,13 @@ export async function GET(request) {
             { tags: tagRegex },
             { builders: tagRegex },
             { projects: tagRegex },
-            { authorities: tagRegex }
+            { authorities: tagRegex },
+            { 'entities.cities': tagRegex },
+            { 'entities.localities': tagRegex },
+            { 'entities.infrastructure': tagRegex },
+            { 'entities.policies': tagRegex },
+            { 'entities.rera': tagRegex },
+            { 'entities.topics': tagRegex }
           ];
         }
         
@@ -182,10 +206,11 @@ export async function GET(request) {
             state: doc.state || 'General',
             city: doc.city || '',
             category: mapToPrimaryCategory(doc.categories || [], doc.category || doc.primary_category || ''),
-            categories: doc.categories || [],
             builders: doc.builders || [],
             projects: doc.projects || [],
             authorities: doc.authorities || [],
+            localities: doc.entities?.localities || [],
+            cities: doc.entities?.cities || (doc.city ? [doc.city] : []),
             displayTags: getDisplayTags(doc),
             sourceName: mapSourceName(doc.source || 'mint')
           }));
@@ -212,7 +237,13 @@ export async function GET(request) {
               { tags: tagRegex },
               { builders: tagRegex },
               { projects: tagRegex },
-              { authorities: tagRegex }
+              { authorities: tagRegex },
+              { 'entities.cities': tagRegex },
+              { 'entities.localities': tagRegex },
+              { 'entities.infrastructure': tagRegex },
+              { 'entities.policies': tagRegex },
+              { 'entities.rera': tagRegex },
+              { 'entities.topics': tagRegex }
             ];
           }
 
@@ -241,10 +272,11 @@ export async function GET(request) {
                 state: stateCode,
                 city: doc.city || '',
                 category: mapToPrimaryCategory(doc.categories || [], doc.category || doc.primary_category || ''),
-                categories: doc.categories || [],
                 builders: doc.builders || [],
                 projects: doc.projects || [],
                 authorities: doc.authorities || [],
+                localities: doc.entities?.localities || [],
+                cities: doc.entities?.cities || (doc.city ? [doc.city] : []),
                 displayTags: getDisplayTags(doc),
                 sourceName: mapSourceName(doc.source || colName)
               };
