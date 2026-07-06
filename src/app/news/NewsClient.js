@@ -49,6 +49,24 @@ const getSourceVisuals = (sourceName) => {
       bgColor: 'bg-blue-50 border border-blue-200 text-blue-700 font-extrabold',
     };
   }
+  if (name.includes('hindustan') || name.includes('ht')) {
+    return {
+      initials: 'HT',
+      bgColor: 'bg-orange-50 border border-orange-200 text-orange-700 font-extrabold',
+    };
+  }
+  if (name.includes('times of india') || name.includes('toi')) {
+    return {
+      initials: 'TOI',
+      bgColor: 'bg-red-50 border border-red-200 text-red-700 font-extrabold',
+    };
+  }
+  if (name.includes('economic times') || name.includes('et')) {
+    return {
+      initials: 'ET',
+      bgColor: 'bg-slate-100 border border-slate-300 text-slate-700 font-extrabold',
+    };
+  }
   return {
     initials: sourceName ? sourceName.substring(0, 3).toUpperCase() : 'PR',
     bgColor: 'bg-brand-primaryBg border border-brand-primaryBorder/30 text-brand-primary font-extrabold',

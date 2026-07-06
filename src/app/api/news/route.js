@@ -25,8 +25,10 @@ function mapSourceName(source) {
     'moneycontrol': 'MoneyControl',
     'economic_times': 'Economic Times',
     'economictimes': 'Economic Times',
+    'hindustan_times': 'Hindustan Times',
     'hindustantimes': 'Hindustan Times',
     'ht': 'Hindustan Times',
+    'times_of_india': 'Times of India',
     'timesofindia': 'Times of India',
     'toi': 'Times of India'
   };
