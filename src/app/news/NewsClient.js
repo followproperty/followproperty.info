@@ -143,12 +143,15 @@ function NewsClient() {
     }
   };
 
-  // Helper to format location as City, State Code
+  // Helper to format location as City, State Code (deduplicating redundant city-states like Delhi)
   const formatLocation = (city, state) => {
     const parts = [];
-    if (city && city.trim()) parts.push(city.trim());
-    if (state && state !== 'General' && state.trim()) {
-      const code = state.trim().toUpperCase();
+    const cleanCity = city ? city.trim() : "";
+    const rawState = state ? state.trim() : "";
+    
+    let stateCode = "";
+    if (rawState && rawState !== 'General') {
+      const code = rawState.toUpperCase();
       const codeMap = {
         'DELHI': 'DL',
         'DL': 'DL',
@@ -157,8 +160,20 @@ function NewsClient() {
         'UTTAR PRADESH': 'UP',
         'UP': 'UP'
       };
-      parts.push(codeMap[code] || state.trim());
+      stateCode = codeMap[code] || rawState;
     }
+    
+    const isDelhiRedundant = (cleanCity.toLowerCase() === 'delhi' && stateCode.toLowerCase() === 'dl') ||
+                              (cleanCity.toLowerCase() === 'delhi' && rawState.toLowerCase() === 'delhi');
+                              
+    if (cleanCity) {
+      parts.push(cleanCity);
+    }
+    
+    if (stateCode && !isDelhiRedundant && cleanCity.toLowerCase() !== stateCode.toLowerCase() && cleanCity.toLowerCase() !== rawState.toLowerCase()) {
+      parts.push(stateCode);
+    }
+    
     return parts.join(', ');
   };
 
