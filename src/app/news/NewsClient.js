@@ -378,8 +378,9 @@ function NewsClient() {
                               e.stopPropagation();
                               setSelectedTag(tag);
                             }}
-                            className="inline-flex items-center px-2.5 py-0.5 rounded bg-brand-bgAlt border border-brand-border/40 text-[9px] font-semibold text-brand-slate uppercase font-sans hover:bg-brand-primaryBg/50 hover:text-brand-primary transition-all duration-300 cursor-pointer shrink-0"
+                            className="inline-flex items-center px-2.5 py-0.5 rounded bg-brand-bgAlt border border-brand-border/40 text-[9px] font-semibold text-brand-slate uppercase font-sans hover:bg-brand-primaryBg/50 hover:text-brand-primary hover:border-brand-primary/30 hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer shrink-0"
                           >
+                            <span className="text-brand-primary/70 mr-0.5 font-bold">#</span>
                             {tag}
                           </button>
                         ))}
