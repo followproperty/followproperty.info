@@ -13,7 +13,7 @@ export default function sitemap() {
         { url: "/contact", priority: 0.8, changeFrequency: "monthly" },
 
         { url: "/faq", priority: 0.7, changeFrequency: "weekly" },
-        { url: "/press-releases", priority: 0.7, changeFrequency: "weekly" },
+        { url: "/news", priority: 0.7, changeFrequency: "weekly" },
         { url: "/careers", priority: 0.7, changeFrequency: "weekly" },
         { url: "/team", priority: 0.6, changeFrequency: "monthly" },
         { url: "/locate-us", priority: 0.6, changeFrequency: "monthly" },

@@ -59,7 +59,7 @@ const getSourceVisuals = (sourceName) => {
 
 
 
-function PressReleasesClient() {
+function NewsClient() {
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -111,7 +111,7 @@ function PressReleasesClient() {
           queryParams.set('tag', selectedTag);
         }
         
-        const res = await fetch(`/api/press-releases?${queryParams.toString()}`);
+        const res = await fetch(`/api/news?${queryParams.toString()}`);
         if (!res.ok) {
           throw new Error('Failed to fetch media feed.');
         }
@@ -432,4 +432,4 @@ function PressReleasesClient() {
   );
 }
 
-export default PressReleasesClient;
+export default NewsClient;
