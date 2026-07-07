@@ -295,10 +295,33 @@ export async function GET(request) {
     let combinedFeed = [...dbArticles, ...dbPressReleases];
     combinedFeed.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+    // Deduplicate feed by URL and normalized title to prevent duplicates
+    const seenUrls = new Set();
+    const seenTitles = new Set();
+    const deduplicatedFeed = [];
+
+    for (const item of combinedFeed) {
+      const url = item.url ? item.url.trim() : '';
+      const hasRealUrl = url && url !== '#';
+      const title = item.title ? item.title.trim().toLowerCase().replace(/\s+/g, ' ') : '';
+
+      if (hasRealUrl) {
+        if (seenUrls.has(url)) continue;
+        seenUrls.add(url);
+      }
+
+      if (title) {
+        if (seenTitles.has(title)) continue;
+        seenTitles.add(title);
+      }
+
+      deduplicatedFeed.push(item);
+    }
+
     return NextResponse.json({
       success: true,
       isLive: hasLiveDbData,
-      data: combinedFeed
+      data: deduplicatedFeed
     });
 
   } catch (error) {
