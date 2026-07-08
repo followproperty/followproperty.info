@@ -100,7 +100,6 @@
         "id": "platform",
         "badge": "Ecosystem Platform",
         "title": "FollowProperty Intelligence Platform",
-        "status": "Coming Soon",
         "desc": "A secure analytical system for monitoring localized circle rates, builder construction milestones, and title deed updates in near real-time.",
         "features": [
           "Project RERA Audit Feed",

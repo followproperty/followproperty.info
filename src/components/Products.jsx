@@ -56,9 +56,11 @@ export default function Products({ onOpenLeadForm }) {
                     <span className="px-3 py-1 rounded bg-brand-primaryBg border border-brand-primaryBorder/30 text-[10px] font-semibold tracking-wider text-brand-primary uppercase font-sans">
                       {product.badge}
                     </span>
-                    <span className="text-xs text-brand-slateLight font-medium tracking-wide">
-                      • {product.status}
-                    </span>
+                    {product.status && (
+                      <span className="text-xs text-brand-slateLight font-medium tracking-wide">
+                        • {product.status}
+                      </span>
+                    )}
                   </div>
 
                   {/* Product Title */}
