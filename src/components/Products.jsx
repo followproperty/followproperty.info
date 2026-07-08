@@ -91,13 +91,25 @@ export default function Products({ onOpenLeadForm }) {
                   )}
 
                   {/* CTA Action Trigger */}
-                  <button
-                    onClick={() => onOpenLeadForm({ leadSource: 'waitlist' })}
-                    className="w-full sm:w-auto max-w-xs sm:max-w-none px-5.5 py-2 sm:px-7 sm:py-2.5 rounded-full font-bold text-xs sm:text-sm tracking-widest uppercase bg-white text-brand-navy border border-brand-navy/80 hover:bg-brand-navy hover:text-white hover:border-brand-navy shadow-sm hover:-translate-y-0.5 active:translate-y-0 hover:scale-[1.012] active:scale-[0.988] transition-premium flex items-center justify-center gap-2.5 cursor-pointer font-sans"
-                  >
-                    {product.ctaText}
-                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/product:translate-x-1" />
-                  </button>
+                  {product.href ? (
+                    <a
+                      href={product.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto max-w-xs sm:max-w-none px-5.5 py-2 sm:px-7 sm:py-2.5 rounded-full font-bold text-xs sm:text-sm tracking-widest uppercase bg-white text-brand-navy border border-brand-navy/80 hover:bg-brand-navy hover:text-white hover:border-brand-navy shadow-sm hover:-translate-y-0.5 active:translate-y-0 hover:scale-[1.012] active:scale-[0.988] transition-premium flex items-center justify-center gap-2.5 cursor-pointer font-sans text-center no-underline"
+                    >
+                      {product.ctaText}
+                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/product:translate-x-1" />
+                    </a>
+                  ) : (
+                    <button
+                      onClick={() => onOpenLeadForm({ leadSource: 'waitlist' })}
+                      className="w-full sm:w-auto max-w-xs sm:max-w-none px-5.5 py-2 sm:px-7 sm:py-2.5 rounded-full font-bold text-xs sm:text-sm tracking-widest uppercase bg-white text-brand-navy border border-brand-navy/80 hover:bg-brand-navy hover:text-white hover:border-brand-navy shadow-sm hover:-translate-y-0.5 active:translate-y-0 hover:scale-[1.012] active:scale-[0.988] transition-premium flex items-center justify-center gap-2.5 cursor-pointer font-sans"
+                    >
+                      {product.ctaText}
+                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/product:translate-x-1" />
+                    </button>
+                  )}
 
                 </div>
 
